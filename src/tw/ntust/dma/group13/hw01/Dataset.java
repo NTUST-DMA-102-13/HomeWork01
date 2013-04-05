@@ -13,6 +13,7 @@ class Dataset {
     private int NumAttributes;
     private int NumClasses;
     private int numEntries;
+    private String [] nameAttributes;
    
     /**
      * @return the NumAttributes
@@ -62,6 +63,20 @@ class Dataset {
 
     double[] getAttributeSet(int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return the nameAttributes
+     */
+    public String[] getNameAttributes() {
+        return nameAttributes;
+    }
+
+    /**
+     * @param nameAttributes the nameAttributes to set
+     */
+    public void setNameAttributes(String[] nameAttributes) {
+        this.nameAttributes = nameAttributes;
     }
 
     

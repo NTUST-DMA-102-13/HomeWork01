@@ -4,10 +4,10 @@
  */
 package tw.ntust.dma.group13.hw01;
 
-import au.com.bytecode.opencsv.CSVReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
@@ -15,6 +15,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.supercsv.cellprocessor.Optional;
+import org.supercsv.cellprocessor.constraint.LMinMax;
+import org.supercsv.cellprocessor.constraint.NotNull;
+import org.supercsv.cellprocessor.constraint.UniqueHashCode;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapReader;
+import org.supercsv.io.ICsvMapReader;
+import org.supercsv.prefs.CsvPreference;
 
 /**
  *
@@ -436,12 +444,74 @@ public class Data_Mining extends javax.swing.JFrame {
         int option = choice.showOpenDialog(this);
         if (option == JFileChooser.APPROVE_OPTION) {
             File file = choice.getSelectedFile();
-            System.out.println("file = " + file.getName());
+            System.out.println("file = " + file.getPath());
+
+            ICsvMapReader mapReader = null;
             try {
-                CSVReader csvReader = new CSVReader(new FileReader(file));
-            } catch (FileNotFoundException ex) {
+                mapReader = new CsvMapReader(new FileReader(file.getPath()), CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+
+                Dataset dataset = new Dataset();
+                String[] header = mapReader.getHeader(true); // skip past the header (we're defining our own)
+                dataset.setNameAttributes(header.clone());
+                // only map the first 3 columns - setting header elements to null means those columns are ignored
+//                final String[] header = new String[]{"customerNo", "firstName", "lastName", null, null, null, null, null,
+//                    null, null};
+
+                // apply some constraints to ignored columns (just because we can)
+//                final CellProcessor[] processors = new CellProcessor[]{new UniqueHashCode(), new NotNull(),
+//                    new NotNull(), new NotNull(), new NotNull(), new Optional(), new Optional(), new NotNull(),
+//                    new NotNull(), new LMinMax(0L, LMinMax.MAX_LONG)};
+
+                Map<String, String> customerMap;
+                while ((customerMap = mapReader.read(header)) != null) {
+                    System.out.println(String.format("lineNo=%s, rowNo=%s, customerMap=%s", mapReader.getLineNumber(),
+                            mapReader.getRowNumber(), customerMap));
+                }
+
+
+            } catch (IOException ex) {
                 Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (mapReader != null) {
+                    try {
+                        mapReader.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
+//            ICsvListReader listReader = null;
+//            try {
+//                listReader = new CsvListReader(new FileReader(file.getPath()), CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+//                System.out.println("aaa");
+//                String header[] = listReader.getHeader(true); // skip the header (can't be used with CsvListReader)
+//                for (String head : header) {
+//                    System.out.println("header = " + head);
+//
+//                }
+//                //                final CellProcessor[] processors = getProcessors();
+//                Dataset data = new Dataset();
+//                List<String> customerList;
+////                int count = 0;
+//                while ((customerList = listReader.read()) != null) {
+//
+//                    System.out.println(String.format("lineNo=%s, rowNo=%s, customerList=%s , %s", listReader.getLineNumber(),
+//                            listReader.getRowNumber(), customerList, customerList.get(0)));
+////                    count++;
+//                }
+//
+//            } catch (IOException ex) {
+////                Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
+//            } finally {
+//                if (listReader != null) {
+//                    try {
+//                        listReader.close();
+//                    } catch (IOException ex) {
+////                        Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            }
+
         }
 //        choice
     }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
