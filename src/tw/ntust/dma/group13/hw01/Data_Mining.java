@@ -4,7 +4,12 @@
  */
 package tw.ntust.dma.group13.hw01;
 
+import au.com.bytecode.opencsv.CSVReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -432,9 +437,11 @@ public class Data_Mining extends javax.swing.JFrame {
         if (option == JFileChooser.APPROVE_OPTION) {
             File file = choice.getSelectedFile();
             System.out.println("file = " + file.getName());
-//            try{
-//                Scanner scan = new Scanner(new FileReader((open).getSelectedFile().getPath()));
-//            }
+            try {
+                CSVReader csvReader = new CSVReader(new FileReader(file));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 //        choice
     }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
