@@ -453,6 +453,11 @@ public class Data_Mining extends javax.swing.JFrame {
                 Dataset dataset = new Dataset();
                 String[] header = mapReader.getHeader(true); // skip past the header (we're defining our own)
                 dataset.setNameAttributes(header.clone());
+                 for (String head : header) {
+                    System.out.println("header = " + head);
+
+                }
+                 dataset.setNumAttributes(header.length);
                 // only map the first 3 columns - setting header elements to null means those columns are ignored
 //                final String[] header = new String[]{"customerNo", "firstName", "lastName", null, null, null, null, null,
 //                    null, null};
@@ -463,12 +468,15 @@ public class Data_Mining extends javax.swing.JFrame {
 //                    new NotNull(), new LMinMax(0L, LMinMax.MAX_LONG)};
 
                 Map<String, String> customerMap;
+                int numberEntry=0;
                 while ((customerMap = mapReader.read(header)) != null) {
                     System.out.println(String.format("lineNo=%s, rowNo=%s, customerMap=%s", mapReader.getLineNumber(),
                             mapReader.getRowNumber(), customerMap));
+                    numberEntry = mapReader.getRowNumber();
                 }
-
-
+                dataset.setNumEntries(numberEntry-1);
+                dataset.setDataReal(customerMap);
+                
             } catch (IOException ex) {
                 Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
             } finally {

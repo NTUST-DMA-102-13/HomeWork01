@@ -4,6 +4,11 @@
  */
 package tw.ntust.dma.group13.hw01;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author vania
@@ -14,6 +19,8 @@ class Dataset {
     private int NumClasses;
     private int numEntries;
     private String [] nameAttributes;
+    private Map<String,String> dataReal;
+    private List<String>[] listValueDistinct;
    
     /**
      * @return the NumAttributes
@@ -26,6 +33,7 @@ class Dataset {
      * @param NumAttributes the NumAttributes to set
      */
     public void setNumAttributes(int NumAttributes) {
+       
         this.NumAttributes = NumAttributes;
     }
 
@@ -77,6 +85,20 @@ class Dataset {
      */
     public void setNameAttributes(String[] nameAttributes) {
         this.nameAttributes = nameAttributes;
+    }
+
+    /**
+     * @return the dataReal
+     */
+    public Map<String,String> getDataReal() {
+        return dataReal;
+    }
+
+    /**
+     * @param dataReal the dataReal to set
+     */
+    public void setDataReal(Map<String,String> dataReal) {
+        this.dataReal = dataReal;
     }
 
     
