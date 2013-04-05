@@ -480,18 +480,26 @@ public class Data_Mining extends javax.swing.JFrame {
                     System.out.println(String.format("lineNo=%s, rowNo=%s, customerMap=%s", mapReader.getLineNumber(),
                             mapReader.getRowNumber(), customerMap));
                     if (numberEntry == 0) {
+                        int i = 0;
                         for (String headerTitle : header) {
                             String data = customerMap.get(headerTitle);
                             ArrayList<String> dataObject = new ArrayList<>();
                             dataObject.add(data);
                             dataValue.put(headerTitle, dataObject);
+                            dataset.getListValueAttribute()[i].add(data);
+                            i++;
                         }
                     } else {
+                        int i = 0;
                         for (String headerTitle : header) {
                             String data = customerMap.get(headerTitle);
                             ArrayList<String> dataObject = dataValue.get(headerTitle);
                             dataObject.add(data);
                             dataValue.put(headerTitle, dataObject);
+                            if (!dataset.getListValueAttribute()[i].contains(data)) {
+                                dataset.getListValueAttribute()[i].add(data);
+                            }
+                            i++;
                         }
 
                     }

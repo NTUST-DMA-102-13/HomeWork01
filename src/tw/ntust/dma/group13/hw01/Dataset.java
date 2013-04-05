@@ -19,9 +19,16 @@ class Dataset {
     private int NumAttributes;
     private int NumClasses;
     private int numEntries;
+    //name of attributes in data set, example marriage status, education
     private String[] nameAttributes;
+    // all of data, save in table with eash key is name of attributes, and
+    // data saved in array list
     private Hashtable<String, ArrayList<String>> dataReal;
-    private List<String>[] listValueAttribute;
+    // list of distinct value with its frequency
+    // exmple in marriage status distinct value list are single=17 data, divorce=18, marriage=20
+    // array represent of attribute , example listValueAttribute[0] = marriage status
+    private List<Map<String,Integer>>[] listValueAttribute;
+    
 
     /**
      * @return the NumAttributes
@@ -34,7 +41,7 @@ class Dataset {
      * @param NumAttributes the NumAttributes to set
      */
     public void setNumAttributes(int NumAttributes) {
-        listValueAttribute = (ArrayList<String>[]) new ArrayList[NumAttributes];
+        setListValueAttribute((ArrayList<Map<String,Integer>>[]) new ArrayList[NumAttributes]);
         this.NumAttributes = NumAttributes;
     }
 
@@ -100,5 +107,19 @@ class Dataset {
      */
     public void setDataReal(Hashtable<String, ArrayList<String>> dataReal) {
         this.dataReal = dataReal;
+    }
+
+    /**
+     * @return the listValueAttribute
+     */
+    public List<Map<String,Integer>>[] getListValueAttribute() {
+        return listValueAttribute;
+    }
+
+    /**
+     * @param listValueAttribute the listValueAttribute to set
+     */
+    public void setListValueAttribute(List<Map<String,Integer>>[] listValueAttribute) {
+        this.listValueAttribute = listValueAttribute;
     }
 }
