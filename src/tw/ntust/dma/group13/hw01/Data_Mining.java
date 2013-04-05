@@ -7,6 +7,9 @@ package tw.ntust.dma.group13.hw01;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.constraint.LMinMax;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -453,11 +457,13 @@ public class Data_Mining extends javax.swing.JFrame {
                 Dataset dataset = new Dataset();
                 String[] header = mapReader.getHeader(true); // skip past the header (we're defining our own)
                 dataset.setNameAttributes(header.clone());
-                 for (String head : header) {
+                Hashtable<String, ArrayList<String>> dataValue = new Hashtable<String, ArrayList<String>>();
+
+                for (String head : header) {
                     System.out.println("header = " + head);
 
                 }
-                 dataset.setNumAttributes(header.length);
+                dataset.setNumAttributes(header.length);
                 // only map the first 3 columns - setting header elements to null means those columns are ignored
 //                final String[] header = new String[]{"customerNo", "firstName", "lastName", null, null, null, null, null,
 //                    null, null};
@@ -468,15 +474,34 @@ public class Data_Mining extends javax.swing.JFrame {
 //                    new NotNull(), new LMinMax(0L, LMinMax.MAX_LONG)};
 
                 Map<String, String> customerMap;
-                int numberEntry=0;
+//                dataValue.
+                int numberEntry = 0;
                 while ((customerMap = mapReader.read(header)) != null) {
                     System.out.println(String.format("lineNo=%s, rowNo=%s, customerMap=%s", mapReader.getLineNumber(),
                             mapReader.getRowNumber(), customerMap));
+                    if (numberEntry == 0) {
+                        for (String headerTitle : header) {
+                            String data = customerMap.get(headerTitle);
+                            ArrayList<String> dataObject = new ArrayList<>();
+                            dataObject.add(data);
+                            dataValue.put(headerTitle, dataObject);
+                        }
+                    } else {
+                        for (String headerTitle : header) {
+                            String data = customerMap.get(headerTitle);
+                            ArrayList<String> dataObject = dataValue.get(headerTitle);
+                            dataObject.add(data);
+                            dataValue.put(headerTitle, dataObject);
+                        }
+
+                    }
                     numberEntry = mapReader.getRowNumber();
+
                 }
-                dataset.setNumEntries(numberEntry-1);
-                dataset.setDataReal(customerMap);
-                
+
+                dataset.setNumEntries(numberEntry - 1);
+                dataset.setDataReal(dataValue);
+
             } catch (IOException ex) {
                 Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
             } finally {

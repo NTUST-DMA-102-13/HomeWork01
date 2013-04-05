@@ -5,6 +5,7 @@
 package tw.ntust.dma.group13.hw01;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ class Dataset {
     private int NumClasses;
     private int numEntries;
     private String[] nameAttributes;
-    private Map<String, String> dataReal;
+    private Hashtable<String, ArrayList<String>> dataReal;
     private List<String>[] listValueAttribute;
 
     /**
@@ -90,14 +91,14 @@ class Dataset {
     /**
      * @return the dataReal
      */
-    public Map<String, String> getDataReal() {
+    public Hashtable<String, ArrayList<String>> getDataReal() {
         return dataReal;
     }
 
     /**
      * @param dataReal the dataReal to set
      */
-    public void setDataReal(Map<String, String> dataReal) {
+    public void setDataReal(Hashtable<String, ArrayList<String>> dataReal) {
         this.dataReal = dataReal;
     }
 }
