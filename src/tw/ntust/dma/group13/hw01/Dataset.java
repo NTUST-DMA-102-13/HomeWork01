@@ -18,10 +18,10 @@ class Dataset {
     private int NumAttributes;
     private int NumClasses;
     private int numEntries;
-    private String [] nameAttributes;
-    private Map<String,String> dataReal;
-    private List<String>[] listValueDistinct;
-   
+    private String[] nameAttributes;
+    private Map<String, String> dataReal;
+    private List<String>[] listValueAttribute;
+
     /**
      * @return the NumAttributes
      */
@@ -33,7 +33,7 @@ class Dataset {
      * @param NumAttributes the NumAttributes to set
      */
     public void setNumAttributes(int NumAttributes) {
-       
+        listValueAttribute = (ArrayList<String>[]) new ArrayList[NumAttributes];
         this.NumAttributes = NumAttributes;
     }
 
@@ -90,16 +90,14 @@ class Dataset {
     /**
      * @return the dataReal
      */
-    public Map<String,String> getDataReal() {
+    public Map<String, String> getDataReal() {
         return dataReal;
     }
 
     /**
      * @param dataReal the dataReal to set
      */
-    public void setDataReal(Map<String,String> dataReal) {
+    public void setDataReal(Map<String, String> dataReal) {
         this.dataReal = dataReal;
     }
-
-    
 }
