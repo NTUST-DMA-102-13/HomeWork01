@@ -9,7 +9,7 @@ package tw.ntust.dma.group13.hw01;
  * @author firman
  */
 public interface MachineLearningInterface {
-    public abstract void Train() ;
-    public abstract void Test() ;
+    public abstract void Train(double [][][] set) ;
+    public abstract void Test (double [][][] set) ;
             
 }
