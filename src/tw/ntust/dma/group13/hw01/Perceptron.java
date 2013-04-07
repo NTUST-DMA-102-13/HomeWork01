@@ -3,15 +3,17 @@ package tw.ntust.dma.group13.hw01;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author firman
  */
 public class Perceptron implements MachineLearningInterface, Runnable {
-    
-    double threshold;
-    double learning_rate;
+
+    private double threshold;
+    private double learning_rate;
     double[] weigths;
     int error_count;
     boolean iterations = false;
@@ -29,55 +31,57 @@ public class Perceptron implements MachineLearningInterface, Runnable {
         this.learning_rate = 0.1;
         this.weigths = new double[Ni];
         this.iterations = false;
+        this.errors = new ArrayList<>();
+
     }
-    
+
     public Perceptron(int Ni, double threshold, double learning_rate, int iteratio) {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
         this.weigths = new double[Ni];
         this.numIterations = iteratio;
         this.iterations = true;
-        System.out.println("this.numIterations = " + this.numIterations);
-        System.out.println("this.iterations = " + this.iterations);
+        this.errors = new ArrayList<>();
     }
-    
+
     public Perceptron(int Ni) {
         this(Ni, 0.5, 0.1);
     }
-    
+
     private double dot_product(double[] values) {
         int n = values.length;//ni
         double sum = 0;
         for (int i = 0; i < n; i++) {
             sum += this.weigths[i] * values[i];
         }
-        
+
         return sum;
     }
-    ArrayList<Integer> errors;
-    
+    ArrayList<Double> errors;
+
     public void Train(double[][][] set) {
-        errors = new ArrayList<>();
+        this.errors = new ArrayList<>();
+        this.errors.clear();
         int inter = 0;
         for (;;) {
             error_count = 0;
             int countData = 0;
             for (double[][] data : set) {
-                System.out.println("countData = " + countData);
-                System.out.println("weight " + inter + " - " + countData + " - " + error_count + " " + Arrays.toString(weigths));
+//                System.out.println("countData = " + countData);
+//                System.out.println("weight " + inter + " - " + countData + " - " + error_count + " " + Arrays.toString(weigths));
                 double[] input_data = data[0];
-                int result = dot_product(input_data) > this.threshold ? 1 : 0;
+                int result = dot_product(input_data) > this.getThreshold() ? 1 : 0;
                 double error = data[1][0] - result;
                 if (error != 0) {
                     error_count++;
                     int n = input_data.length;//ni
                     for (int i = 0; i < n; i++) {
-                        this.weigths[i] += learning_rate * error * input_data[i];
+                        this.weigths[i] += getLearning_rate() * error * input_data[i];
                     }
                 }
                 countData++;
             }
-            errors.add(error_count);
+            this.errors.add((double)error_count);
             if (error_count == 0) {
                 break;
             }
@@ -85,18 +89,25 @@ public class Perceptron implements MachineLearningInterface, Runnable {
                 break;
             }
             inter++;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Perceptron.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         //  return new Object[1][1];
     }
-    
-    public void Test(double [][][] set) {
-        for(double [][] s:set){
-            double output=0.0;
-            for(int i=0;i<s[0].length;i++) output+= s[0][i]*weigths[i];
-            System.out.format("%s -> %.5f.\n",Arrays.toString(s[0]),output);
+
+    public void Test(double[][][] set) {
+        for (double[][] s : set) {
+            double output = 0.0;
+            for (int i = 0; i < s[0].length; i++) {
+                output += s[0][i] * weigths[i];
+            }
+            System.out.format("%s -> %.5f.\n", Arrays.toString(s[0]), output);
         }
     }
-    
+
     public static void main(String[] args) {
         double[][][] training_set;
         //training_set = new double [][][]{{{1, 0, 0}, {1,}}, {{1, 0, 1}, {1,}}, {{1, 1, 0}, {1}}, {{1, 1, 1}, {0}}};
@@ -111,10 +122,10 @@ public class Perceptron implements MachineLearningInterface, Runnable {
          */
         /* //OR */
         training_set = new double[][][]{
-            {{0, 0}, {0}},
-            {{0, 1}, {1}},
-            {{1, 0}, {1}},
-            {{1, 1}, {1}},};
+            {{0, 0}, {0, 1}},
+            {{0, 1}, {1, 0}},
+            {{1, 0}, {1, 0}},
+            {{1, 1}, {1, 0}},};
         //*/
 
         /* //XOR *
@@ -127,15 +138,15 @@ public class Perceptron implements MachineLearningInterface, Runnable {
          };
          //*/
         Perceptron p = new Perceptron(2);
-        
+
         p.Train(training_set);
-        
+
         p.Test(training_set);
     }
-    
+
     @Override
     public void run() {
-        
+
         switch (this.typeRun) {
             case MachineLearningInterface.TrainFunction:
                 this.Train(getSetInput());
@@ -173,5 +184,33 @@ public class Perceptron implements MachineLearningInterface, Runnable {
      */
     public void setSetInput(double[][][] setInput) {
         this.setInput = setInput;
+    }
+
+    /**
+     * @return the threshold
+     */
+    public double getThreshold() {
+        return threshold;
+    }
+
+    /**
+     * @param threshold the threshold to set
+     */
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    /**
+     * @return the learning_rate
+     */
+    public double getLearning_rate() {
+        return learning_rate;
+    }
+
+    /**
+     * @param learning_rate the learning_rate to set
+     */
+    public void setLearning_rate(double learning_rate) {
+        this.learning_rate = learning_rate;
     }
 }

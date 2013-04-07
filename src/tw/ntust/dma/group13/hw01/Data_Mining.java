@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -18,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
@@ -42,6 +42,7 @@ import org.supercsv.prefs.CsvPreference;
  */
 public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
+    BackPropagation bpn;
     Perceptron p;
     int typeOfNeuralNetwork;
     Dataset dataTrain;
@@ -102,7 +103,6 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jSpinner_iteratiuon = new javax.swing.JSpinner();
         jLabel_hiddenLayer = new javax.swing.JLabel();
         jSpinner_hiddenLayer = new javax.swing.JSpinner();
-        jPanel_hidden = new javax.swing.JPanel();
         jRadioButton_TrainError = new javax.swing.JRadioButton();
         jRadioButton_iteration = new javax.swing.JRadioButton();
         jLabel_threshold = new javax.swing.JLabel();
@@ -154,7 +154,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
         jLabel1.setText("Learning Rate");
 
-        jTextField_LearningRate.setText("jTextField1");
+        jTextField_LearningRate.setText("0");
 
         jLabel3.setText("Number Iteration");
 
@@ -165,17 +165,6 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                 jSpinner_hiddenLayerStateChanged(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel_hiddenLayout = new javax.swing.GroupLayout(jPanel_hidden);
-        jPanel_hidden.setLayout(jPanel_hiddenLayout);
-        jPanel_hiddenLayout.setHorizontalGroup(
-            jPanel_hiddenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 372, Short.MAX_VALUE)
-        );
-        jPanel_hiddenLayout.setVerticalGroup(
-            jPanel_hiddenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 292, Short.MAX_VALUE)
-        );
 
         buttonGroup_stop.add(jRadioButton_TrainError);
         jRadioButton_TrainError.setText("Training Error");
@@ -195,13 +184,12 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
         jLabel_threshold.setText("Threshold");
 
-        jTextField_threshold.setText("jTextField1");
+        jTextField_threshold.setText("0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel_hidden, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,7 +209,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                             .addComponent(jSpinner_iteratiuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSpinner_hiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField_threshold, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,9 +234,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_threshold)
                     .addComponent(jTextField_threshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel_hidden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(321, 321, 321))
         );
 
         jTabbedPane1.addTab("Initial Variable", jPanel2);
@@ -619,8 +605,9 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                 dataset.setNumEntries(numberEntry - 1);
                 System.out.println("dataset.getNumEntries() = " + dataset.getNumEntries());
                 dataset.setDataReal(dataValue);
-                dataset.setNumAttributes(header.length);
+//                dataset.setNumAttributes(header.length);
                 Object[][] dataa = convertTo2ArrayObject(dataTable);
+                dataset.setNumClasses(dataset.getListValueAttribute()[dataset.getNameAttributes().length].size());
                 System.out.println("dataa.length = " + dataa.length);
                 TableModel table = new DefaultTableModel(dataa, header);
                 jTable_dataSet.setModel(table);
@@ -662,8 +649,9 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 //        jLabel_hiddenLayer.setEnabled(true);
         jLabel_hiddenLayer.setEnabled(true);
         jSpinner_hiddenLayer.setEnabled(true);
-        jLabel_threshold.setEnabled(false);
-        jTextField_threshold.setEnabled(false);
+//        jLabel_threshold.setEnabled(false);
+//        jTextField_threshold.setEnabled(false);
+        jLabel_threshold.setText("Training Error");
 //        jTable_deltas.setEnabled(true);
     }//GEN-LAST:event_jRadioButtonMenuItem_bpnActionPerformed
 
@@ -672,9 +660,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
         jLabel_hiddenLayer.setEnabled(false);
         jSpinner_hiddenLayer.setEnabled(false);
-        jLabel_threshold.setEnabled(true);
-        jTextField_threshold.setEnabled(true);
-//        jTable_deltas.setEnabled(false);
+        jLabel_threshold.setText("Threshold ");//        jTable_deltas.setEnabled(false);
     }//GEN-LAST:event_jRadioButtonMenuItem_propagationActionPerformed
 
     private void jMenuItem_runTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_runTrainActionPerformed
@@ -687,23 +673,26 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
             JOptionPane.showMessageDialog(this, "Learn Rate Error Input");
             return;
         }
+
+        double threshold;
+        try {
+            threshold = Double.parseDouble(jTextField_threshold.getText());
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Threshold Error Input");
+            return;
+        }
+
         System.out.println("LearningRate = " + LearningRate);
         int numberIteration = (int) jSpinner_iteratiuon.getValue();
-        int numberHiddenLayer = (int) jSpinner_hiddenLayer.getValue();
-        int numberHiddenNode = 0;
-        System.out.println("numberIteration = " + numberIteration);
-        System.out.println("numberHiddenLayer = " + numberHiddenLayer);
-        System.out.println("numberHiddenNode = " + numberHiddenNode);
+        int numberHiddenNode = (int) jSpinner_hiddenLayer.getValue();
         if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
             isRun = true;
             if (!iterasion) {
-                p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate);
+                p = new Perceptron(dataTrain.getNumAttributes() - 1, threshold, LearningRate);
 
             } else {
-                p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate, (int) jSpinner_iteratiuon.getValue());
-
-//                p.Train(dataTrain.getDataSet());
-
+                p = new Perceptron(dataTrain.getNumAttributes() - 1, threshold, LearningRate, numberIteration);
             }
             p.setTypeRun(MachineLearningInterface.TrainFunction);
             p.setSetInput(dataTrain.getDataSet());
@@ -715,16 +704,16 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
         } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
 
-            if (numberHiddenLayer != 0) {
-                int[] numberHiddenNodes = new int[numberHiddenLayer];
-                for (int i = 0; i < panel_list.length; i++) {
-                    JSpinner spin = (JSpinner) panel_list[i].getComponents()[1];
-                    numberHiddenNodes[i] = (int) spin.getValue();
-                }
-//                    MLP mlp = new MLP(dataTrain, dataTest, numberHiddenLayer+2, numberHiddenNodes, LearningRate, new HyperbolictangentFunction());
-//                    mlp.sequential();
-                System.out.println("Sukses");
-            }
+            bpn = new BackPropagation(dataTrain.getNumAttributes() - 1, numberHiddenNode, dataTrain.getNumClasses());
+            bpn.setSetInput(dataTrain.getDataSet());
+            bpn.setIteration(numberIteration);
+            bpn.setError(threshold);
+            bpn.setIsIteration(iterasion);
+            bpn.setTypeRun(MachineLearningInterface.TrainFunction);
+            data = new Thread(bpn);
+            data.start();
+            isRun = true;
+//            bpn.Train(dataTrain.getDataSet());
 
         }
 
@@ -734,12 +723,20 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
         jSpinner_iteratiuon.setEnabled(true);
         iterasion = true;
+        if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
+            jTextField_threshold.setEnabled(false);
+        } else {
+            jTextField_threshold.setEnabled(true);
+        }
+
     }//GEN-LAST:event_jRadioButton_iterationActionPerformed
 
     private void jRadioButton_TrainErrorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_TrainErrorActionPerformed
         // TODO add your handling code here:
         jSpinner_iteratiuon.setEnabled(false);
         iterasion = false;
+//        if(typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN)
+        jTextField_threshold.setEnabled(true);
     }//GEN-LAST:event_jRadioButton_TrainErrorActionPerformed
 
     private void jMenuItem_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_quitActionPerformed
@@ -815,7 +812,6 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel_chart;
-    private javax.swing.JPanel jPanel_hidden;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem10;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem11;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
@@ -843,8 +839,16 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     @Override
     public void run() {
         while (!isExit) {
-            System.out.println("isRun = " + isRun);
-            if (data != null && !data.isAlive() && isRun) {
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
+            }
+//            System.out.println("isRun = " + isRun+" data "+data+"  " );
+            if (data != null
+                    && typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron
+                    && isRun == true) {
+//            if (data != null && data.isAlive() && isRun) {
                 System.out.println("isRun = " + isRun);
                 Object[] weight = new Object[p.weigths.length];
                 for (int i = 0; i < weight.length; i++) {
@@ -854,15 +858,52 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                 dataWe[0] = weight;
                 TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
                 jTable_weight.setModel(table);
-
-                isRun = false;
-
-
-
-            } else if (data != null && data.isAlive() && isRun) {
+                jTable_weight.repaint();
+                // isRun = false;
                 XYSeries series = new XYSeries("XYGraph");
+                System.out.println("Arrays.toString(p.errors) = " + Arrays.toString(p.errors.toArray()));
                 int i = 1;
-                for (Integer err : p.errors) {
+                for (Double err : p.errors) {
+                    series.add(i, err);
+                    i++;
+                }
+
+                // Add the series to your data set
+                XYSeriesCollection dataset = new XYSeriesCollection();
+                dataset.addSeries(series);
+                // Generate the graph
+                JFreeChart chart = ChartFactory.createXYLineChart(
+                        "XY Chart", // Title
+                        "x-axis", // x-axis Label
+                        "y-axis", // y-axis Label
+                        dataset, // Dataset
+                        PlotOrientation.VERTICAL, // Plot Orientation
+                        true, // Show Legend
+                        true, // Use tooltips
+                        false // Configure chart to generate URLs?
+                        );
+
+                try {
+                    ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+                } catch (IOException e) {
+                    System.err.println("Problem occurred creating chart.");
+                }
+//            jPanel1 = new JPanel();
+                ChartPanel CP = new ChartPanel(chart, true);
+                CP.setChart(chart);
+                jPanel1.removeAll();
+                jPanel1.setLayout(new java.awt.BorderLayout());
+                jPanel1.add(CP, BorderLayout.CENTER);
+                jPanel1.validate();
+                jPanel1.repaint();
+            } else if (data != null && typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN
+                    && this.isRun == true) {
+                XYSeries series = new XYSeries("XYGraph");
+                System.out.println("bpn = " + bpn);
+                System.out.println("bpn.errors = " + bpn.errors);
+                System.out.println("Arrays.toString(p.errors) = " + Arrays.toString(bpn.errors.toArray()));
+                int i = 1;
+                for (Double err : bpn.errors) {
                     series.add(i, err);
                     i++;
                 }
@@ -896,6 +937,47 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                 jPanel1.validate();
                 jPanel1.repaint();
             }
+            if (data != null && !data.isAlive()) {
+                isRun = false;
+            }
+//            }
+//            else if (data != null && data.isAlive() && isRun) {
+//                XYSeries series = new XYSeries("XYGraph");
+//                int i = 1;
+//                for (Integer err : p.errors) {
+//                    series.add(i, err);
+//                    i++;
+//                }
+//
+//                // Add the series to your data set
+//                XYSeriesCollection dataset = new XYSeriesCollection();
+//                dataset.addSeries(series);
+//                // Generate the graph
+//                JFreeChart chart = ChartFactory.createXYLineChart(
+//                        "XY Chart", // Title
+//                        "x-axis", // x-axis Label
+//                        "y-axis", // y-axis Label
+//                        dataset, // Dataset
+//                        PlotOrientation.VERTICAL, // Plot Orientation
+//                        true, // Show Legend
+//                        true, // Use tooltips
+//                        false // Configure chart to generate URLs?
+//                        );
+//
+//                try {
+//                    ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+//                } catch (IOException e) {
+//                    System.err.println("Problem occurred creating chart.");
+//                }
+////            jPanel1 = new JPanel();
+//                ChartPanel CP = new ChartPanel(chart, true);
+//                CP.setChart(chart);
+//                jPanel1.removeAll();
+//                jPanel1.setLayout(new java.awt.BorderLayout());
+//                jPanel1.add(CP, BorderLayout.CENTER);
+//                jPanel1.validate();
+//                jPanel1.repaint();
+//            }
         }
     }
 }

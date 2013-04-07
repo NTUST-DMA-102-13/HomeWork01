@@ -84,6 +84,27 @@ class Dataset {
         this.numEntries = numEntries;
     }
 
+    double[] getClasses(int i) {
+        double[] retClass = new double[this.NumClasses];
+        String clas = nameAttributes[nameAttributes.length - 1];
+        ArrayList<String> nameClas = dataReal.get(clas);
+        String valueClass = nameClas.get(i);
+
+        Set<String> dataKey = listValueAttribute[nameAttributes.length - 1].keySet();
+
+        int n = 0;
+        for (String datas : dataKey) {
+            if (datas.equals(valueClass)) {
+                retClass[n] = 1;
+            } else {
+                retClass[n] = 0;
+            }
+            n++;
+        }
+
+        return retClass;
+    }
+
     double getClass(int i) {
         String clas = nameAttributes[nameAttributes.length - 1];
         ArrayList<String> nameClas = dataReal.get(clas);
@@ -92,14 +113,8 @@ class Dataset {
             double hsl = Double.parseDouble(valueClass);
             return hsl;
         } catch (Exception ex) {
-//            System.out.println("valueClass = " + valueClass);
-//            System.out.println("mapCategorcalAttribute = " + mapCategorcalAttribute);
-//            System.out.println("mapCategorcalAttribute.get(clas) = " + mapCategorcalAttribute.get(clas));
-//            System.out.println("mapCategorcalAttribute.get(clas).get(valueClass) = " + mapCategorcalAttribute.get(clas).get(valueClass));
             return mapCategorcalAttribute.get(clas).get(valueClass);
         }
-
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     double[] getAttributeSet(int i) {
@@ -113,16 +128,15 @@ class Dataset {
             }
         }
         return dataReDs;
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
      * @return the nameAttributes
      */
     public String[] getNameAttributes() {
-        String temp[] = new String[(nameAttributes.length-1)];
-        for(int i =0;i<temp.length;i++){
-            temp [i]= nameAttributes[i];
+        String temp[] = new String[(nameAttributes.length - 1)];
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = nameAttributes[i];
         }
         return temp;
     }
@@ -228,8 +242,8 @@ class Dataset {
 
         for (int i = 0; i < dataRet.length; i++) {
             dataRet[i][0] = getAttributeSet(i);
-            dataRet[i][1] = new double[1];
-            dataRet[i][1][0] = normalisasi(nameAttributes[nameAttributes.length - 1], getClass(i));
+            dataRet[i][1] = new double[NumClasses];
+            dataRet[i][1] = getClasses(i);
         }
 
         return dataRet;
