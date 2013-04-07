@@ -99,10 +99,21 @@ public class MLP {
             error = 0f;
             //For each example in the training set.
             for(int i=0; i<ds.getNumEntries(); i++){
-                //Feedforward, calculate error and backwards propagate error across neurons.
-                feedForward(ds.getAttributeSet(i));
-                outputs = layers[layers.length-1].getOutputs();
-                error += backPropagate(outputs, toOutputVector(ds.getClass(i), layers[layers.length-1].getSize()));
+                
+                System.out.println("layers.length = " + layers.length);
+                for(int k= 0;k<layers.length;k++){
+                  if(k==0){
+//                      layers[k].s
+                  }
+                }
+//                //Feedforward, calculate error and backwards propagate error across neurons.
+//                System.out.println("ds.getAttributeSet(i) = " + ds.getAttributeSet(i));
+//                feedForward(ds.getAttributeSet(i));
+//                System.out.println("layers[layers.length-1].getOutputs() = " + layers[layers.length-1].getOutputs());
+//                outputs = layers[layers.length-1].getOutputs();
+//                System.out.println("ds.getClass(i) = " + ds.getClass(i));
+//                System.out.println("layers[layers.length-1].getSize() = " + layers[layers.length-1].getSize());
+//                error += backPropagate(outputs, toOutputVector(ds.getClass(i), layers[layers.length-1].getSize()));
 
                 //For each layer, updaqte weights.
                 for(int j=layers.length-1; j>0; j--){
@@ -117,7 +128,7 @@ public class MLP {
                     }
                     layers[j].setNeurons(neurons);
                 }
-                System.out.println("EPOCH: "+epoch+" EXAMPLE: "+i+" OUTPUT: "+Arrays.toString(outputs)+" DESIRED: "+ds.getClass(i)+" ERROR: "+error+"");
+//                System.out.println("EPOCH: "+epoch+" EXAMPLE: "+i+" OUTPUT: "+Arrays.toString(outputs)+" DESIRED: "+ds.getClass(i)+" ERROR: "+error+"");
             }
             error /= ds.getNumEntries();
         }while(error > 0.01);//TO DO: Change target error

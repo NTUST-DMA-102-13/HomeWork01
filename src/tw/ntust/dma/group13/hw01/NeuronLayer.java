@@ -16,9 +16,23 @@ class NeuronLayer {
     // jumlah neurons
     private int Size;
 
-    NeuronLayer(int neurons, int numAttributes, TransferFunction tf) {
-        this.Size = neurons;
-        this.neurons = new Neuron[neurons];
+    NeuronLayer(int NumberNeuron, int numPreviousNeuron, TransferFunction tf) {
+        this.Size = NumberNeuron;
+        this.neurons = new Neuron[NumberNeuron];
+        for(int i =0;i<this.neurons.length;i++){
+            Neuron neu = new Neuron(numPreviousNeuron);
+            neurons[i]= neu;
+        }
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+     NeuronLayer(int NumberNeuron, int numPreviousNeuron, double[] inputs,TransferFunction tf) {
+        this.Size = NumberNeuron;
+        this.neurons = new Neuron[NumberNeuron];
+        for(int i =0;i<this.neurons.length;i++){
+            Neuron neu = new Neuron(numPreviousNeuron,inputs);
+            neurons[i]= neu;
+        }
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

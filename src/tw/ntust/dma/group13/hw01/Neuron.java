@@ -10,11 +10,25 @@ package tw.ntust.dma.group13.hw01;
  */
 class Neuron {
 
-    private double[] Weights;
+    private double[] Weights,input;
     private double Delta;
     private double OldDelta;
     private double Output;
 
+    public Neuron(int numberWeight,double [] input) {
+        for(int i=0;i<numberWeight;i++){
+            Weights [i]= Math.random();
+        }
+        this.input = input;
+    }
+
+      public Neuron(int numberWeight) {
+        for(int i=0;i<numberWeight;i++){
+            Weights [i]= Math.random();
+        }
+    }
+    
+    
     /**
      * @return the Weights
      */
@@ -61,7 +75,7 @@ class Neuron {
     public double weightedInput() {
         double sum = 0;
         for(int i=0;i<Weights.length;i++){
-            sum = sum + (Weights[i]*Output);
+            sum = sum + (Weights[i]*input[i]);
         }
         return sum;
     }
