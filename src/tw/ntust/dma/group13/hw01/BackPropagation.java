@@ -149,10 +149,11 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
         return this.Ao.clone();
 
     }
+    ArrayList<Double[]> weightList;
 
     private double backPropagate(double[] target, double learning_rate, double M) {
         double[] output_deltas = new double[No];
-
+        weightList = new ArrayList<>();
         for (int k = 0; k < No; k++) {
             double error = target[k] - Ao[k];
             output_deltas[k] = dsigmoid(Ao[k]) * error;
@@ -173,22 +174,33 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
             for (int k = 0; k < No; k++) {
                 double change = output_deltas[k] * Ah[j];
                 Wo[j][k] += (learning_rate * change + M * Co[j][k]);
-                System.out.print(Wo[j][k] + "\t");
+                Double[] data = new Double[4];
+                data[0] = (double) -1.0;
+                data[1] = (double) j + 1;
+                data[2] = (double) k + 1;
+                data[3] = Wo[j][k];
+                weightList.add(data);
+//                System.out.print(Wo[j][k] + "\t");
                 this.Co[j][k] = change;
             }
-            System.out.println("");
+//            System.out.println("");
         }
-        System.out.println("#############");
+//        System.out.println("#############");
         for (int i = 0; i < Ni; i++) {
             for (int j = 0; j < Nh; j++) {
                 double change = hidden_deltas[j] * Ai[i];
                 Wi[i][j] += (learning_rate * change + M * Ci[i][j]);
                 this.Ci[i][j] = change;
-                System.out.print(Wi[i][j] + "\t");
+                Double[] data = new Double[4];
+                data[0] = (double) i + 1;
+                data[1] = (double) j + 1;
+                data[2] = (double) -1;
+                data[3] = Wi[i][j];
+                weightList.add(data);
             }
-            System.out.println("");
+//            System.out.println("");
         }
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
         double error = 0.0;
         for (int k = 0; k < No; k++) {
             double d = target[k] - Ao[k];
@@ -210,19 +222,22 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
         }
     }
     ArrayList<Double> errors;
+    ArrayList<double[]> ouput;
 
     public void Train(double[][][] set, int iteration, double learning_rate, double momentum) {
         System.out.println("iteration = " + iteration);
         this.errors = new ArrayList<>();
+        this.ouput = new ArrayList<>();
         int N = set.length;
         for (int i = 0; i < iteration; i++) {
             double error = 0.0;
-
-            System.out.println("i = " + i);
+            ouput.clear();
+//            System.out.println("i = " + i);
             for (int n = 0; n < N; n++) {
                 double[] input = set[n][0];
                 double[] target = set[n][1];
-                this.update(input);
+                double[] outs = this.update(input);
+                ouput.add(outs);
                 error += this.backPropagate(target, learning_rate, momentum);
             }
             if (i % 100 == 0) {
@@ -244,11 +259,12 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
         int count = 0;
         for (;;) {
             double error = 0.0;
-
+            ouput.clear();
             for (int n = 0; n < N; n++) {
                 double[] input = set[n][0];
                 double[] target = set[n][1];
-                this.update(input);
+                double[] outs = this.update(input);
+                ouput.add(outs);
                 error += this.backPropagate(target, learning_rate, momentum);
             }
             if (error < error_threshold) {
@@ -277,15 +293,18 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
 
     @Override
     public void Test(double[][][] set) {
+        ouput.clear();
         for (double[][] s : set) {
-            System.out.format("%s -> %s.\n", Arrays.toString(s[0]), Arrays.toString(update(s[0])));
+            double[] outs = this.update(s[0]);
+            ouput.add(outs);
+            System.out.format("%s -> %s.\n", Arrays.toString(s[0]), Arrays.toString(outs));
         }
     }
 
     public static void main(String[] args) {
         double[][][] training_set;
 
-        BackPropagation bpn = new BackPropagation(2, 2, 2);
+        BackPropagation bpn = new BackPropagation(2, 4, 2);
 
         /* //AND *
          training_set = new double [][][] {

@@ -105,6 +105,13 @@ class Dataset {
         return retClass;
     }
 
+    Object[] getClassValue() {
+        String clas = nameAttributes[nameAttributes.length - 1];
+        Map<String, Integer> maps = listValueAttribute[nameAttributes.length - 1];
+
+        return maps.keySet().toArray();
+    }
+
     double getClass(int i) {
         String clas = nameAttributes[nameAttributes.length - 1];
         ArrayList<String> nameClas = dataReal.get(clas);

@@ -791,6 +791,24 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     private void jMenuItem_runTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_runTestActionPerformed
         // TODO add your handling code here:
         if (this.typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
+            bpn.Test(dataTest.getDataSet());
+            ArrayList<double[]> retout = bpn.ouput;
+            Object dataout[][] = new Object[retout.size()][];
+            int count = 0;
+            for (double[] ds : retout) {
+                Object[] dsCast = new Object[ds.length];
+                for (int l = 0; l < dsCast.length; l++) {
+                    dsCast[l] = ds[l];
+                }
+                dataout[count] = dsCast;
+                count++;
+            }
+//                    Object headers[];
+//                    headers = new Object[]{"Output"};
+            TableModel table2 = new DefaultTableModel(dataout, dataTrain.getClassValue());
+            jTable_ouput.setModel(table2);
+            jTable_ouput.repaint();
+
         } else if (this.typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
             p.Test(dataTest.getDataSet());
             System.out.println("p.outs = " + p.outs);
@@ -1023,6 +1041,41 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                     jPanel1.add(CP, BorderLayout.CENTER);
                     jPanel1.validate();
                     jPanel1.repaint();
+
+                    ArrayList<Double[]> retWet = bpn.weightList;
+                    Object dataWe[][] = new Object[retWet.size()][4];
+                    int count = 0;
+                    for (Double[] ds : retWet) {
+
+                        dataWe[count] = ds;
+                        count++;
+                    }
+
+                    Object dataHed[] = new Object[]{"Input", "Hidden", "Output", "Weight"};
+//                    dataWe[0] = weight;
+                    TableModel table = new DefaultTableModel(dataWe, dataHed);
+                    jTable_weight.setModel(table);
+                    jTable_weight.repaint();
+
+
+                    ArrayList<double[]> retout = bpn.ouput;
+                    Object dataout[][] = new Object[retout.size()][];
+                    count = 0;
+                    for (double[] ds : retout) {
+                        Object[] dsCast = new Object[ds.length];
+                        for (int l = 0; l < dsCast.length; l++) {
+                            dsCast[l] = ds[l];
+                        }
+                        dataout[count] = dsCast;
+                        count++;
+                    }
+//                    Object headers[];
+//                    headers = new Object[]{"Output"};
+                    TableModel table2 = new DefaultTableModel(dataout, dataTrain.getClassValue());
+                    jTable_ouput.setModel(table2);
+                    jTable_ouput.repaint();
+
+
                 }
                 if (data != null && !data.isAlive()) {
                     isRun = false;
