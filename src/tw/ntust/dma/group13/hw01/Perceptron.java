@@ -83,6 +83,16 @@ public class Perceptron implements MachineLearningInterface{
             
         };
         //*/
+        
+        /* //XOR *
+        training_set = new double [][][] {
+            {{0,0},{0}},
+            {{0,1},{1}},
+            {{1,0},{1}},
+            {{1,1},{0}},
+            
+        };
+        //*/
         Perceptron p = new Perceptron(2); 
         
         p.Train(training_set);
