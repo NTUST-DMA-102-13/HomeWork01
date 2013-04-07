@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.jfree.chart.ChartFactory;
@@ -54,6 +56,14 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
      * Creates new form Data_Mining
      */
     public Data_Mining() {
+        try {
+                // Set System L&F
+                UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+            } 
+            catch (     UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+               // handle exception
+            }
         initComponents();
         ImageIcon img = new ImageIcon("img\\dm.png");
         this.setIconImage(img.getImage());
