@@ -55,7 +55,6 @@ public class Perceptron implements MachineLearningInterface {
     Object[][] data;
     public void Train(double[][][] set) {
         ArrayList<Object[]> daaa= new ArrayList<>();
-//        daaa.toArray()[];
         int inter = 0;
         for (;;) {
             error_count = 0;
@@ -64,8 +63,6 @@ public class Perceptron implements MachineLearningInterface {
                 System.out.println("countData = " + countData);
                 System.out.println("weight " + inter + " - " + countData + " - " + error_count + " " + Arrays.toString(weigths));
                 double[] input_data = data[0];
-//                System.out.println("Arrays.toString(data[0]) = " + Arrays.toString(data[0]));
-//                System.out.println("input_data.length = " + input_data.length);
                 int result = dot_product(input_data) > this.threshold ? 1 : 0;
                 double error = data[1][0] - result;
                 if (error != 0) {

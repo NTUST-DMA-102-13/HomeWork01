@@ -120,7 +120,11 @@ class Dataset {
      * @return the nameAttributes
      */
     public String[] getNameAttributes() {
-        return nameAttributes;
+        String temp[] = new String[(nameAttributes.length-1)];
+        for(int i =0;i<temp.length;i++){
+            temp [i]= nameAttributes[i];
+        }
+        return temp;
     }
 
     /**

@@ -4,6 +4,7 @@
  */
 package tw.ntust.dma.group13.hw01;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,10 +14,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -24,6 +23,13 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
@@ -47,7 +53,7 @@ public class Data_Mining extends javax.swing.JFrame {
         initComponents();
         ImageIcon img = new ImageIcon("img\\dm.png");
         this.setIconImage(img.getImage());
-        SpinnerModel sm = new SpinnerNumberModel(10, 10, 10000, 1);
+        SpinnerModel sm = new SpinnerNumberModel(1, 1, 10000, 1);
 //        SpinnerModel sm2 = new SpinnerNumberModel(1, 1, 10, 1);
         jSpinner_iteratiuon.setModel(sm);
         typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
@@ -57,6 +63,7 @@ public class Data_Mining extends javax.swing.JFrame {
         jSpinner_iteratiuon.setEnabled(false);
         jRadioButton_TrainError.setSelected(true);
         iterasion = false;
+        jTable_deltas.setEnabled(false);
 //        jSpinner_hiddenLayer.setModel(sm2);
     }
 
@@ -88,16 +95,15 @@ public class Data_Mining extends javax.swing.JFrame {
         jTextField_threshold = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
+        jTable_weight = new javax.swing.JTable();
+        jPanel_Deltas = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTable_deltas = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_dataSet = new javax.swing.JTable();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        jPanel_chart = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem_inTrainSet = new javax.swing.JMenuItem();
@@ -183,9 +189,7 @@ public class Data_Mining extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel_hiddenLayer)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel_hiddenLayer)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -194,21 +198,14 @@ public class Data_Mining extends javax.swing.JFrame {
                         .addGap(49, 49, 49)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton_TrainError)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jRadioButton_iteration))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField_LearningRate, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jSpinner_iteratiuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jSpinner_hiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addGap(49, 49, 49))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jTextField_threshold, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addComponent(jRadioButton_TrainError)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRadioButton_iteration))
+                            .addComponent(jTextField_LearningRate, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinner_iteratiuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinner_hiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_threshold, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,7 +237,7 @@ public class Data_Mining extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Initial Variable", jPanel2);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_weight.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -251,7 +248,7 @@ public class Data_Mining extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable_weight);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -266,7 +263,7 @@ public class Data_Mining extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Weights ", jPanel3);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_deltas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -277,20 +274,20 @@ public class Data_Mining extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(jTable_deltas);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel_DeltasLayout = new javax.swing.GroupLayout(jPanel_Deltas);
+        jPanel_Deltas.setLayout(jPanel_DeltasLayout);
+        jPanel_DeltasLayout.setHorizontalGroup(
+            jPanel_DeltasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
+        jPanel_DeltasLayout.setVerticalGroup(
+            jPanel_DeltasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Deltas", jPanel4);
+        jTabbedPane1.addTab("Deltas", jPanel_Deltas);
 
         jTable_dataSet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -318,31 +315,31 @@ public class Data_Mining extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Data Set", jPanel5);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane4.setViewportView(jTable4);
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 372, Short.MAX_VALUE)
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 223, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("tab5", jPanel6);
+        javax.swing.GroupLayout jPanel_chartLayout = new javax.swing.GroupLayout(jPanel_chart);
+        jPanel_chart.setLayout(jPanel_chartLayout);
+        jPanel_chartLayout.setHorizontalGroup(
+            jPanel_chartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel_chartLayout.setVerticalGroup(
+            jPanel_chartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_chartLayout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 243, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Chart", jPanel_chart);
 
         jMenu1.setText("File");
 
@@ -672,6 +669,7 @@ public class Data_Mining extends javax.swing.JFrame {
         jSpinner_hiddenLayer.setEnabled(true);
         jLabel_threshold.setEnabled(false);
         jTextField_threshold.setEnabled(false);
+        jTable_deltas.setEnabled(true);
     }//GEN-LAST:event_jRadioButtonMenuItem_bpnActionPerformed
 
     private void jRadioButtonMenuItem_propagationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem_propagationActionPerformed
@@ -679,8 +677,9 @@ public class Data_Mining extends javax.swing.JFrame {
         typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
         jLabel_hiddenLayer.setEnabled(false);
         jSpinner_hiddenLayer.setEnabled(false);
-        jLabel_threshold.setEnabled(false);
-        jTextField_threshold.setEnabled(false);
+        jLabel_threshold.setEnabled(true);
+        jTextField_threshold.setEnabled(true);
+        jTable_deltas.setEnabled(false);
     }//GEN-LAST:event_jRadioButtonMenuItem_propagationActionPerformed
 
     private void jMenuItem_runTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_runTrainActionPerformed
@@ -709,17 +708,59 @@ public class Data_Mining extends javax.swing.JFrame {
         System.out.println("numberHiddenLayer = " + numberHiddenLayer);
         System.out.println("numberHiddenNode = " + numberHiddenNode);
         if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
+            Perceptron p;
             if (!iterasion) {
-                Perceptron p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate);
+                p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate);
 
                 p.Train(dataTrain.getDataSet());
 
             } else {
-                Perceptron p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate, (int) jSpinner_iteratiuon.getValue());
+                p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate, (int) jSpinner_iteratiuon.getValue());
 
                 p.Train(dataTrain.getDataSet());
 
             }
+            Object[] weight = new Object[p.weigths.length];
+            for (int i = 0; i < weight.length; i++) {
+                weight[i] = p.weigths[i];
+            }
+            Object dataWe[][] = new Object[1][];
+            dataWe[0] = weight;
+            TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
+            jTable_weight.setModel(table);
+            XYSeries series = new XYSeries("XYGraph");
+            series.add(1, 1);
+            series.add(1, 2);
+            series.add(2, 1);
+            series.add(3, 9);
+            series.add(4, 10);
+            // Add the series to your data set
+            XYSeriesCollection dataset = new XYSeriesCollection();
+            dataset.addSeries(series);
+            // Generate the graph
+            JFreeChart chart = ChartFactory.createXYLineChart(
+                    "XY Chart", // Title
+                    "x-axis", // x-axis Label
+                    "y-axis", // y-axis Label
+                    dataset, // Dataset
+                    PlotOrientation.VERTICAL, // Plot Orientation
+                    true, // Show Legend
+                    true, // Use tooltips
+                    false // Configure chart to generate URLs?
+                    );
+
+            try {
+                ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+            } catch (IOException e) {
+                System.err.println("Problem occurred creating chart.");
+            }
+            ChartPanel CP = new ChartPanel(chart);
+
+            jPanel1.setLayout(new java.awt.BorderLayout());
+            jPanel1.add(CP,BorderLayout.CENTER);
+            jPanel1.validate();
+//            jPanel_chart.repaint();
+
         } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
 
             if (numberHiddenLayer != 0) {
@@ -806,11 +847,12 @@ public class Data_Mining extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_runTrain;
     private javax.swing.JMenu jMenu_processingFunction;
     private javax.swing.JMenu jMenu_typeNeuralNetwork;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel_Deltas;
+    private javax.swing.JPanel jPanel_chart;
     private javax.swing.JPanel jPanel_hidden;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem10;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem11;
@@ -828,14 +870,12 @@ public class Data_Mining extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner_hiddenLayer;
     private javax.swing.JSpinner jSpinner_iteratiuon;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable_dataSet;
+    private javax.swing.JTable jTable_deltas;
+    private javax.swing.JTable jTable_weight;
     private javax.swing.JTextField jTextField_LearningRate;
     private javax.swing.JTextField jTextField_threshold;
     // End of variables declaration//GEN-END:variables
