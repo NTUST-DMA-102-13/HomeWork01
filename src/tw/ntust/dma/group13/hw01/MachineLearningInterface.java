@@ -11,5 +11,8 @@ package tw.ntust.dma.group13.hw01;
 public interface MachineLearningInterface {
     public abstract void Train(double [][][] set) ;
     public abstract void Test (double [][][] set) ;
-            
+           
+    public static int TrainFunction = 0;
+    public static int TestingFunction = 1;
+    
 }
