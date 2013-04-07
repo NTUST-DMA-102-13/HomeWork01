@@ -58,8 +58,11 @@ public class Perceptron implements MachineLearningInterface{
         }
     }
     public void Test(double [][][] set) {
-        
-        return ;
+        for(double [][] s:set){
+            double output=0.0;
+            for(int i=0;i<s[0].length;i++) output+= s[0][i]*weigths[i];
+            System.out.format("%s -> %.5f.\n",Arrays.toString(s[0]),output);
+        }
     }
     
     public static void main(String[] args) {
