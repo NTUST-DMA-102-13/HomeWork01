@@ -20,6 +20,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.constraint.LMinMax;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -76,7 +78,7 @@ public class Data_Mining extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTable_dataSet = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
@@ -245,7 +247,7 @@ public class Data_Mining extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Deltas", jPanel4);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_dataSet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -256,7 +258,7 @@ public class Data_Mining extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(jTable_dataSet);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -404,7 +406,7 @@ public class Data_Mining extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -479,21 +481,28 @@ public class Data_Mining extends javax.swing.JFrame {
                 int numberEntry = 0;
                 ArrayList<String> categoricalAttribute = new ArrayList<>();
                 ArrayList<String> numericalAttribute = new ArrayList<>();
-//                dataset.setCategoricalAttribute(n);
+//             
+                ArrayList<Object[]> dataTable = new ArrayList<>();
+                //  jTable_dataSet.
                 while ((customerMap = mapReader.read(header)) != null) {
                     System.out.println(String.format("lineNo=%s, rowNo=%s, customerMap=%s", mapReader.getLineNumber(),
                             mapReader.getRowNumber(), customerMap));
+                    //     dataTable.add(customerMap.);
+                    //  Object datTable[] = new Object[customerMap.size()];
                     if (numberEntry == 0) {
                         int i = 0;
+                        ArrayList<Object> dataVall = new ArrayList<>();
                         for (String headerTitle : header) {
                             String data = customerMap.get(headerTitle);
                             ArrayList<String> dataObject = new ArrayList<>();
                             dataObject.add(data);
+                            dataVall.add(data);
                             dataValue.put(headerTitle, dataObject);
                             // dataset.getListValueAttribute()[i] = new HashMap<>();
                             Map map = new HashMap();
                             map.put(data, 1);
                             dataset.getListValueAttribute()[i] = map;
+                            //   dataTable.add(dataObject.toArray());
                             i++;
                             // for divided header based on categorical or numerical 
                             try {
@@ -503,14 +512,18 @@ public class Data_Mining extends javax.swing.JFrame {
                                 categoricalAttribute.add(headerTitle);
                             }
                         }
+                        dataTable.add(dataVall.toArray());
                     } else {
                         int i = 0;
+                        ArrayList<Object> dataVall = new ArrayList<>();
                         for (String headerTitle : header) {
                             String data = customerMap.get(headerTitle);
                             ArrayList<String> dataObject = dataValue.get(headerTitle);
                             dataObject.add(data);
+                            dataVall.add(data);
                             dataValue.put(headerTitle, dataObject);
                             Map map = (Map) dataset.getListValueAttribute()[i];
+                            //   dataTable.add(dataObject.toArray());
                             if (map.containsKey(data)) {
                                 Integer val = (Integer) map.get(data);
                                 val = val + 1;
@@ -536,15 +549,23 @@ public class Data_Mining extends javax.swing.JFrame {
                             }
                             i++;
                         }
-
+                        dataTable.add(dataVall.toArray());
                     }
+
                     numberEntry = mapReader.getRowNumber();
 
                 }
                 dataset.setCategoricalAttribute(categoricalAttribute);
                 dataset.setNumericalAttribute(numericalAttribute);
+                dataset.processCategoricalInput();
                 dataset.setNumEntries(numberEntry - 1);
                 dataset.setDataReal(dataValue);
+                Object [][] dataa = convertTo2ArrayObject(dataTable);
+                System.out.println("dataa.length = " + dataa.length);
+               TableModel table = new DefaultTableModel(dataa, header);
+               jTable_dataSet.setModel(table);
+             //   jTable_dataSet = new JTable(table);
+                jTable_dataSet.repaint();
 
             } catch (IOException ex) {
                 Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
@@ -592,6 +613,14 @@ public class Data_Mining extends javax.swing.JFrame {
         }
 //        choice
     }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
+
+    Object[][] convertTo2ArrayObject(ArrayList<Object[]> data) {
+        Object[][] objRet = new Object[data.size()][data.get(0).length];
+        for (int i = 0; i < data.size(); i++) {
+            objRet[i] = data.get(i);
+        }
+        return objRet;
+    }
 
     private void jMenuItem_inTestSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_inTestSetActionPerformed
         // TODO add your handling code here:
@@ -689,8 +718,8 @@ public class Data_Mining extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTable_dataSet;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables

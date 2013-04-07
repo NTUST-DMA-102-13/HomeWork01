@@ -35,13 +35,14 @@ class Dataset {
     private ArrayList<String> numericalAttribute;
     // to save mapping of each dummy variabel and each categoricla
     // example attribute : marriage status. value : 1 -> single, 2-> married, 3 --> divorce
-    Map<String,Map<String,Integer>> mapCategorcalAttribute;
-    
+    Map<String, Map<String, Integer>> mapCategorcalAttribute;
+
     /**
      * @return the NumAttributes
      */
     public int getNumAttributes() {
 //       categoricalAttr
+        
         return NumAttributes;
     }
 
@@ -158,30 +159,37 @@ class Dataset {
     public void setCategoricalAttribute(ArrayList<String> categoricalAttribute) {
         this.categoricalAttribute = categoricalAttribute;
     }
-    
-    public void processCategoricalInput(){
+
+    public void processCategoricalInput() {
         mapCategorcalAttribute = new HashMap<>();
         for (String catAttr : categoricalAttribute) {
+            if (!mapCategorcalAttribute.containsKey(catAttr)) {
+                Map<String, Integer> maps = new HashMap<>();
+                mapCategorcalAttribute.put(catAttr, maps);
+
+            }
+            // mapCategorcalAttribute.
+            Map<String, Integer> maps = mapCategorcalAttribute.get(catAttr);
             int index = getIndexAttribute(catAttr);
-            Set<String> attibuteValueList= listValueAttribute[index].keySet();
-            int i =1;
+            Set<String> attibuteValueList = listValueAttribute[index].keySet();
+            int i = 1;
             for (Iterator<String> itAttrVal = attibuteValueList.iterator(); itAttrVal.hasNext();) {
                 String valueDat = itAttrVal.next();
-                
-                    i++;
+                maps.put(valueDat, i);
+                i++;
             }
 //           for(int i=0;i<attibuteValueList.;i++){
 //               attibuteValueList.
 //           }
         }
     }
-    
-    public int getIndexAttribute(String nameAttribute){
-        for(int i=0;i< nameAttributes.length;i++){
-            if(nameAttribute.equals(nameAttributes[i]))
+
+    public int getIndexAttribute(String nameAttribute) {
+        for (int i = 0; i < nameAttributes.length; i++) {
+            if (nameAttribute.equals(nameAttributes[i])) {
                 return i;
+            }
         }
         return -1;
     }
-    
 }
