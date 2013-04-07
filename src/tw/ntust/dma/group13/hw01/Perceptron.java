@@ -18,7 +18,8 @@ public class Perceptron implements MachineLearningInterface,Runnable {
     int numIterations = 0;
 
     
-    int typeRun =0;
+    private int typeRun =0;
+    double[][][] setInput;
     //weights =
     /**
      *
@@ -132,6 +133,28 @@ public class Perceptron implements MachineLearningInterface,Runnable {
 
     @Override
     public void run() {
+        
+        switch(this.typeRun){
+            case MachineLearningInterface.TrainFunction:
+              
+                break;
+            case MachineLearningInterface.TestingFunction:
+                break;
+        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return the typeRun
+     */
+    public int getTypeRun() {
+        return typeRun;
+    }
+
+    /**
+     * @param typeRun the typeRun to set
+     */
+    public void setTypeRun(int typeRun) {
+        this.typeRun = typeRun;
     }
 }
