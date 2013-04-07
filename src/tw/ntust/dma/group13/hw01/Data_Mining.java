@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,14 +18,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.constraint.LMinMax;
-import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.UniqueHashCode;
-import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
@@ -37,6 +32,9 @@ import org.supercsv.prefs.CsvPreference;
  */
 public class Data_Mining extends javax.swing.JFrame {
 
+    
+    int typeOfNeuralNetwork;
+    
     /**
      * Creates new form Data_Mining
      */
@@ -44,6 +42,10 @@ public class Data_Mining extends javax.swing.JFrame {
         initComponents();
         ImageIcon img = new ImageIcon("img\\dm.png");
         this.setIconImage(img.getImage());
+        SpinnerModel sm = new SpinnerNumberModel(1000, 1000, 10000, 1);
+        jSpinner_iteratiuon.setModel(sm);
+        typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
+        
     }
 
     /**
@@ -56,17 +58,17 @@ public class Data_Mining extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenu3 = new javax.swing.JMenu();
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup_typeNeuralNetwork = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         choice = new javax.swing.JFileChooser();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextField_LearningRate = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextField_Bias = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        jSpinner_iteratiuon = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
         jSpinner_hiddenLayer = new javax.swing.JSpinner();
         jPanel_hidden = new javax.swing.JPanel();
@@ -89,8 +91,8 @@ public class Data_Mining extends javax.swing.JFrame {
         jMenuItem_quit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu_typeNeuralNetwork = new javax.swing.JMenu();
-        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem_propagation = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem_bpn = new javax.swing.JRadioButtonMenuItem();
         jMenu_processingFunction = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
@@ -116,11 +118,11 @@ public class Data_Mining extends javax.swing.JFrame {
 
         jLabel1.setText("Learning Rate");
 
-        jTextField1.setText("jTextField1");
+        jTextField_LearningRate.setText("jTextField1");
 
         jLabel2.setText("Bias");
 
-        jTextField2.setText("jTextField2");
+        jTextField_Bias.setText("jTextField2");
 
         jLabel3.setText("Number Iteration");
 
@@ -152,7 +154,7 @@ public class Data_Mining extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_LearningRate, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel1)
@@ -160,11 +162,11 @@ public class Data_Mining extends javax.swing.JFrame {
                                 .addComponent(jLabel3))
                             .addGap(39, 39, 39)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField_Bias, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addGap(10, 10, 10)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jSpinner_iteratiuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jSpinner_hiddenLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap(66, Short.MAX_VALUE))
             .addComponent(jPanel_hidden, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -175,15 +177,15 @@ public class Data_Mining extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_LearningRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Bias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinner_iteratiuon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -326,13 +328,24 @@ public class Data_Mining extends javax.swing.JFrame {
 
         jMenu_typeNeuralNetwork.setText("Type Neural Network");
 
-        jRadioButtonMenuItem1.setSelected(true);
-        jRadioButtonMenuItem1.setText("Propagation");
-        jMenu_typeNeuralNetwork.add(jRadioButtonMenuItem1);
+        buttonGroup_typeNeuralNetwork.add(jRadioButtonMenuItem_propagation);
+        jRadioButtonMenuItem_propagation.setSelected(true);
+        jRadioButtonMenuItem_propagation.setText("Propagation");
+        jRadioButtonMenuItem_propagation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem_propagationActionPerformed(evt);
+            }
+        });
+        jMenu_typeNeuralNetwork.add(jRadioButtonMenuItem_propagation);
 
-        jRadioButtonMenuItem2.setSelected(true);
-        jRadioButtonMenuItem2.setText("Back Propagation");
-        jMenu_typeNeuralNetwork.add(jRadioButtonMenuItem2);
+        buttonGroup_typeNeuralNetwork.add(jRadioButtonMenuItem_bpn);
+        jRadioButtonMenuItem_bpn.setText("Back Propagation");
+        jRadioButtonMenuItem_bpn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem_bpnActionPerformed(evt);
+            }
+        });
+        jMenu_typeNeuralNetwork.add(jRadioButtonMenuItem_bpn);
 
         jMenu2.add(jMenu_typeNeuralNetwork);
 
@@ -429,7 +442,7 @@ public class Data_Mining extends javax.swing.JFrame {
         layout.setAutoCreateContainerGaps(true);
         GroupLayout.ParallelGroup pl = layout.createParallelGroup(GroupLayout.Alignment.TRAILING);
         GroupLayout.SequentialGroup sq = layout.createSequentialGroup();
-
+        
         for (int i = 0; i < panel_list.length; i++) {
             panel_list[i] = new jPanel_hiddenNode();
             JLabel label = (JLabel) panel_list[i].getComponent(0);
@@ -444,27 +457,32 @@ public class Data_Mining extends javax.swing.JFrame {
         layout.setVerticalGroup(sq);
 //        jScrollPane5.repaint();
     }//GEN-LAST:event_jSpinner_hiddenLayerStateChanged
-
+    
     private void jMenuItem_inTrainSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_inTrainSetActionPerformed
         // TODO add your handling code here:
+        Dataset trainDataSet = readFile();
+    }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
+    
+    Dataset readFile() {
         JFileChooser choice = new JFileChooser();
         int option = choice.showOpenDialog(this);
+        
         if (option == JFileChooser.APPROVE_OPTION) {
             File file = choice.getSelectedFile();
             System.out.println("file = " + file.getPath());
-
+            Dataset dataset = new Dataset();
             ICsvMapReader mapReader = null;
             try {
                 mapReader = new CsvMapReader(new FileReader(file.getPath()), CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
-
-                Dataset dataset = new Dataset();
+                
+                
                 String[] header = mapReader.getHeader(true); // skip past the header (we're defining our own)
                 dataset.setNameAttributes(header.clone());
                 Hashtable<String, ArrayList<String>> dataValue = new Hashtable<String, ArrayList<String>>();
-
+                
                 for (String head : header) {
                     System.out.println("header = " + head);
-
+                    
                 }
                 dataset.setNumAttributes(header.length);
                 // only map the first 3 columns - setting header elements to null means those columns are ignored
@@ -551,22 +569,22 @@ public class Data_Mining extends javax.swing.JFrame {
                         }
                         dataTable.add(dataVall.toArray());
                     }
-
+                    
                     numberEntry = mapReader.getRowNumber();
-
+                    
                 }
                 dataset.setCategoricalAttribute(categoricalAttribute);
                 dataset.setNumericalAttribute(numericalAttribute);
                 dataset.processCategoricalInput();
                 dataset.setNumEntries(numberEntry - 1);
                 dataset.setDataReal(dataValue);
-                Object [][] dataa = convertTo2ArrayObject(dataTable);
+                Object[][] dataa = convertTo2ArrayObject(dataTable);
                 System.out.println("dataa.length = " + dataa.length);
-               TableModel table = new DefaultTableModel(dataa, header);
-               jTable_dataSet.setModel(table);
-             //   jTable_dataSet = new JTable(table);
+                TableModel table = new DefaultTableModel(dataa, header);
+                jTable_dataSet.setModel(table);
+                //   jTable_dataSet = new JTable(table);
                 jTable_dataSet.repaint();
-
+                
             } catch (IOException ex) {
                 Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -578,42 +596,11 @@ public class Data_Mining extends javax.swing.JFrame {
                     }
                 }
             }
-//            ICsvListReader listReader = null;
-//            try {
-//                listReader = new CsvListReader(new FileReader(file.getPath()), CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
-//                System.out.println("aaa");
-//                String header[] = listReader.getHeader(true); // skip the header (can't be used with CsvListReader)
-//                for (String head : header) {
-//                    System.out.println("header = " + head);
-//
-//                }
-//                //                final CellProcessor[] processors = getProcessors();
-//                Dataset data = new Dataset();
-//                List<String> customerList;
-////                int count = 0;
-//                while ((customerList = listReader.read()) != null) {
-//
-//                    System.out.println(String.format("lineNo=%s, rowNo=%s, customerList=%s , %s", listReader.getLineNumber(),
-//                            listReader.getRowNumber(), customerList, customerList.get(0)));
-////                    count++;
-//                }
-//
-//            } catch (IOException ex) {
-////                Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
-//            } finally {
-//                if (listReader != null) {
-//                    try {
-//                        listReader.close();
-//                    } catch (IOException ex) {
-////                        Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                }
-//            }
-
+            return dataset;
         }
-//        choice
-    }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
-
+        return null;
+    }
+    
     Object[][] convertTo2ArrayObject(ArrayList<Object[]> data) {
         Object[][] objRet = new Object[data.size()][data.get(0).length];
         for (int i = 0; i < data.size(); i++) {
@@ -621,19 +608,21 @@ public class Data_Mining extends javax.swing.JFrame {
         }
         return objRet;
     }
-
+    
     private void jMenuItem_inTestSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_inTestSetActionPerformed
         // TODO add your handling code here:
-        JFileChooser choice = new JFileChooser();
-        int option = choice.showOpenDialog(this);
-        if (option == JFileChooser.APPROVE_OPTION) {
-            File file = choice.getSelectedFile();
-            System.out.println("file = " + file.getName());
-//            try{
-//                Scanner scan = new Scanner(new FileReader((open).getSelectedFile().getPath()));
-//            }
-        }
+        Dataset testDataSet = readFile();
     }//GEN-LAST:event_jMenuItem_inTestSetActionPerformed
+
+    private void jRadioButtonMenuItem_bpnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem_bpnActionPerformed
+        // TODO add your handling code here:
+        typeOfNeuralNetwork = Contraint.NeuralNetwork_BPN;
+    }//GEN-LAST:event_jRadioButtonMenuItem_bpnActionPerformed
+
+    private void jRadioButtonMenuItem_propagationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem_propagationActionPerformed
+        // TODO add your handling code here:
+        typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
+    }//GEN-LAST:event_jRadioButtonMenuItem_propagationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -670,8 +659,8 @@ public class Data_Mining extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup_typeNeuralNetwork;
     private javax.swing.JFileChooser choice;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -698,10 +687,8 @@ public class Data_Mining extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel_hidden;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem10;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem11;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem4;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem5;
@@ -709,18 +696,20 @@ public class Data_Mining extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem7;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem8;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem9;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem_bpn;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem_propagation;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner_hiddenLayer;
+    private javax.swing.JSpinner jSpinner_iteratiuon;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable_dataSet;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField_Bias;
+    private javax.swing.JTextField jTextField_LearningRate;
     // End of variables declaration//GEN-END:variables
 }
