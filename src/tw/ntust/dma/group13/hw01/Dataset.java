@@ -106,10 +106,10 @@ class Dataset {
         double[] dataReDs = new double[nameAttributes.length - 1];
         for (int j = 0; j < nameAttributes.length - 1; j++) {
             try {
-                dataReDs[j] = Double.parseDouble(dataReal.get(nameAttributes[j]).get(i));
+                dataReDs[j] = normalisasi(nameAttributes[j], Double.parseDouble(dataReal.get(nameAttributes[j]).get(i)));
             } catch (NumberFormatException ex) {
                 String valueClass = dataReal.get(nameAttributes[j]).get(i);
-                dataReDs[j] = mapCategorcalAttribute.get(nameAttributes[j]).get(valueClass);
+                dataReDs[j] = normalisasi(nameAttributes[j], mapCategorcalAttribute.get(nameAttributes[j]).get(valueClass));
             }
         }
         return dataReDs;
@@ -225,9 +225,52 @@ class Dataset {
         for (int i = 0; i < dataRet.length; i++) {
             dataRet[i][0] = getAttributeSet(i);
             dataRet[i][1] = new double[1];
-            dataRet[i][1][0] = getClass(i);
+            dataRet[i][1][0] = normalisasi(nameAttributes[nameAttributes.length - 1], getClass(i));
         }
 
         return dataRet;
+    }
+
+    double normalisasi(String attribute, double original) {
+        double Max = MaximaValue(attribute);
+        double Min = MinimalValue(attribute);
+        double hasil = (original - Min) / (Max - Min);
+        return hasil;
+    }
+
+    public double MinimalValue(String attribute) {
+        if (categoricalAttribute.contains(attribute)) {
+            return 1;
+        } else {
+            ArrayList<String> dataVa = dataReal.get(attribute);
+            double minmal = 9999;
+            for (String data : dataVa) {
+                double datas = Double.parseDouble(data);
+
+                if (minmal > datas) {
+                    minmal = datas;
+                }
+            }
+            return minmal;
+        }
+    }
+
+    public double MaximaValue(String attribute) {
+
+        if (categoricalAttribute.contains(attribute)) {
+            return mapCategorcalAttribute.get(attribute).size() + 1;
+        } else {
+            ArrayList<String> dataVa = dataReal.get(attribute);
+            double max = -9999;
+            for (String data : dataVa) {
+                double datas = Double.parseDouble(data);
+
+                if (max < datas) {
+                    max = datas;
+                }
+            }
+            return max;
+        }
+
     }
 }

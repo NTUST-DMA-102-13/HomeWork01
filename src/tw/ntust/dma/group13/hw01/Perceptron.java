@@ -1,5 +1,6 @@
 package tw.ntust.dma.group13.hw01;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -51,7 +52,10 @@ public class Perceptron implements MachineLearningInterface {
         return sum;
     }
 
+    Object[][] data;
     public void Train(double[][][] set) {
+        ArrayList<Object[]> daaa= new ArrayList<>();
+//        daaa.toArray()[];
         int inter = 0;
         for (;;) {
             error_count = 0;
@@ -80,6 +84,7 @@ public class Perceptron implements MachineLearningInterface {
                 break;
             inter++;
         }
+      //  return new Object[1][1];
     }
 
     public void Test(double[][][] set) {
