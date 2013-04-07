@@ -715,7 +715,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         System.out.println("numberHiddenLayer = " + numberHiddenLayer);
         System.out.println("numberHiddenNode = " + numberHiddenNode);
         if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
-
+            isRun = true;
             if (!iterasion) {
                 p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate);
 
@@ -729,42 +729,8 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
             p.setSetInput(dataTrain.getDataSet());
             data = new Thread(p);
             data.start();
-            isRun = true;
-            XYSeries series = new XYSeries("XYGraph");
-            int i = 1;
-            for (Integer err : p.errors) {
-                series.add(i, err);
-                i++;
-            }
 
-            // Add the series to your data set
-            XYSeriesCollection dataset = new XYSeriesCollection();
-            dataset.addSeries(series);
-            // Generate the graph
-            JFreeChart chart = ChartFactory.createXYLineChart(
-                    "XY Chart", // Title
-                    "x-axis", // x-axis Label
-                    "y-axis", // y-axis Label
-                    dataset, // Dataset
-                    PlotOrientation.VERTICAL, // Plot Orientation
-                    true, // Show Legend
-                    true, // Use tooltips
-                    false // Configure chart to generate URLs?
-                    );
-
-            try {
-                ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
-            } catch (IOException e) {
-                System.err.println("Problem occurred creating chart.");
-            }
-//            jPanel1 = new JPanel();
-            ChartPanel CP = new ChartPanel(chart, true);
-            CP.setChart(chart);
-            jPanel1.removeAll();
-            jPanel1.setLayout(new java.awt.BorderLayout());
-            jPanel1.add(CP, BorderLayout.CENTER);
-            jPanel1.validate();
-            jPanel1.repaint();
+            System.out.println("isRun = " + isRun);
 //            jPanel_chart.repaint();
 
         } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
@@ -900,8 +866,9 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     @Override
     public void run() {
         while (!isExit) {
-         //   System.out.println("isRun = " + isRun);
-            if (data!= null && !data.isAlive() && isRun) {
+            System.out.println("isRun = " + isRun);
+            if (data != null && !data.isAlive() && isRun) {
+                System.out.println("isRun = " + isRun);
                 Object[] weight = new Object[p.weigths.length];
                 for (int i = 0; i < weight.length; i++) {
                     weight[i] = p.weigths[i];
@@ -910,7 +877,47 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                 dataWe[0] = weight;
                 TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
                 jTable_weight.setModel(table);
+
                 isRun = false;
+
+
+
+            } else if (data != null && data.isAlive() && isRun) {
+                XYSeries series = new XYSeries("XYGraph");
+                int i = 1;
+                for (Integer err : p.errors) {
+                    series.add(i, err);
+                    i++;
+                }
+
+                // Add the series to your data set
+                XYSeriesCollection dataset = new XYSeriesCollection();
+                dataset.addSeries(series);
+                // Generate the graph
+                JFreeChart chart = ChartFactory.createXYLineChart(
+                        "XY Chart", // Title
+                        "x-axis", // x-axis Label
+                        "y-axis", // y-axis Label
+                        dataset, // Dataset
+                        PlotOrientation.VERTICAL, // Plot Orientation
+                        true, // Show Legend
+                        true, // Use tooltips
+                        false // Configure chart to generate URLs?
+                        );
+
+                try {
+                    ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+                } catch (IOException e) {
+                    System.err.println("Problem occurred creating chart.");
+                }
+//            jPanel1 = new JPanel();
+                ChartPanel CP = new ChartPanel(chart, true);
+                CP.setChart(chart);
+                jPanel1.removeAll();
+                jPanel1.setLayout(new java.awt.BorderLayout());
+                jPanel1.add(CP, BorderLayout.CENTER);
+                jPanel1.validate();
+                jPanel1.repaint();
             }
         }
     }
