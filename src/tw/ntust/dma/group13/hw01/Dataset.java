@@ -92,10 +92,10 @@ class Dataset {
             double hsl = Double.parseDouble(valueClass);
             return hsl;
         } catch (Exception ex) {
-            System.out.println("valueClass = " + valueClass);
-            System.out.println("mapCategorcalAttribute = " + mapCategorcalAttribute);
-            System.out.println("mapCategorcalAttribute.get(clas) = " + mapCategorcalAttribute.get(clas));
-            System.out.println("mapCategorcalAttribute.get(clas).get(valueClass) = " + mapCategorcalAttribute.get(clas).get(valueClass));
+//            System.out.println("valueClass = " + valueClass);
+//            System.out.println("mapCategorcalAttribute = " + mapCategorcalAttribute);
+//            System.out.println("mapCategorcalAttribute.get(clas) = " + mapCategorcalAttribute.get(clas));
+//            System.out.println("mapCategorcalAttribute.get(clas).get(valueClass) = " + mapCategorcalAttribute.get(clas).get(valueClass));
             return mapCategorcalAttribute.get(clas).get(valueClass);
         }
 
@@ -108,8 +108,8 @@ class Dataset {
             try {
                 dataReDs[j] = Double.parseDouble(dataReal.get(nameAttributes[j]).get(i));
             } catch (NumberFormatException ex) {
-                String valueClass = dataReal.get(nameAttributes[i]).get(i);
-                dataReDs[j] = mapCategorcalAttribute.get(nameAttributes[i]).get(valueClass);
+                String valueClass = dataReal.get(nameAttributes[j]).get(i);
+                dataReDs[j] = mapCategorcalAttribute.get(nameAttributes[j]).get(valueClass);
             }
         }
         return dataReDs;

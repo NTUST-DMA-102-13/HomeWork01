@@ -704,7 +704,7 @@ public class Data_Mining extends javax.swing.JFrame {
         System.out.println("numberHiddenLayer = " + numberHiddenLayer);
         System.out.println("numberHiddenNode = " + numberHiddenNode);
         if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
-            Perceptron p = new Perceptron(2);
+            Perceptron p = new Perceptron(dataTrain.getNumAttributes()-1, LearningRate, LearningRate);
 
             p.Train(dataTrain.getDataSet());
         } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
