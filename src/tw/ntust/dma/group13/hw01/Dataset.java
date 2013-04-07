@@ -7,7 +7,9 @@ package tw.ntust.dma.group13.hw01;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -27,9 +29,14 @@ class Dataset {
     // exmple in marriage status distinct value list are single=17 data, divorce=18, marriage=20
     // array represent of attribute , example listValueAttribute[0] = marriage status
     private Map<String, Integer>[] listValueAttribute;
+    // to save categorical attribute, ex marriage status
     private ArrayList<String> categoricalAttribute;
+    // to save numerical attibute, age
     private ArrayList<String> numericalAttribute;
-
+    // to save mapping of each dummy variabel and each categoricla
+    // example attribute : marriage status. value : 1 -> single, 2-> married, 3 --> divorce
+    Map<String,Map<String,Integer>> mapCategorcalAttribute;
+    
     /**
      * @return the NumAttributes
      */
@@ -151,4 +158,30 @@ class Dataset {
     public void setCategoricalAttribute(ArrayList<String> categoricalAttribute) {
         this.categoricalAttribute = categoricalAttribute;
     }
+    
+    public void processCategoricalInput(){
+        mapCategorcalAttribute = new HashMap<>();
+        for (String catAttr : categoricalAttribute) {
+            int index = getIndexAttribute(catAttr);
+            Set<String> attibuteValueList= listValueAttribute[index].keySet();
+            int i =1;
+            for (Iterator<String> itAttrVal = attibuteValueList.iterator(); itAttrVal.hasNext();) {
+                String valueDat = itAttrVal.next();
+                
+                    i++;
+            }
+//           for(int i=0;i<attibuteValueList.;i++){
+//               attibuteValueList.
+//           }
+        }
+    }
+    
+    public int getIndexAttribute(String nameAttribute){
+        for(int i=0;i< nameAttributes.length;i++){
+            if(nameAttribute.equals(nameAttributes[i]))
+                return i;
+        }
+        return -1;
+    }
+    
 }
