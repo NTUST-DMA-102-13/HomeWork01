@@ -12,18 +12,19 @@ import java.util.Arrays;
  */
 public class MLP {
       private Dataset ds, ds2;
-    private double rate, momentum;
+    private double rate; // , momentum;
     private NeuronLayer[] layers;
     private TransferFunction tf;
 
     /**
        Constructs a new MLP network.
     **/ 
-    public MLP(Dataset ds, Dataset ds2, int noLayers, int neurons, double rate, double momentum, TransferFunction tf){
+    public MLP(Dataset ds, Dataset ds2, int noLayers, 
+            int neurons, double rate, TransferFunction tf){
         this.ds = ds;
         this.ds2 = ds2;
         this.rate = rate;
-        this.momentum = momentum;
+//        this.momentum = momentum;
         this.tf = tf;
         layers = new NeuronLayer[noLayers];
         //Input layer.
@@ -35,6 +36,25 @@ public class MLP {
         //Output layer.
         layers[layers.length-1] = new NeuronLayer(ds.getNumClasses(), layers[layers.length-2].getSize(), tf);
     }
+    public MLP(Dataset ds, Dataset ds2, int noLayers, 
+            int neurons[], double rate,
+             TransferFunction tf){
+        this.ds = ds;
+        this.ds2 = ds2;
+        this.rate = rate;
+     //   this.momentum = momentum;
+        this.tf = tf;
+        layers = new NeuronLayer[noLayers];
+        //Input layer.
+        layers[0] = new NeuronLayer(ds.getNumAttributes(), ds.getNumAttributes(), tf);
+        //Hidden layers.
+        for(int i=1; i<layers.length-1; i++){
+           layers[i] = new NeuronLayer(neurons[i-1], layers[i-1].getSize(),tf);
+        }
+        //Output layer.
+        layers[layers.length-1] = new NeuronLayer(ds.getNumClasses(), layers[layers.length-2].getSize(), tf);
+    }
+    
 
     /**
        Tests the network against data it hasn't seen before.

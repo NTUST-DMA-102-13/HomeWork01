@@ -59,7 +59,11 @@ class Neuron {
     // activation function
 
     public double weightedInput() {
-        return 0;
+        double sum = 0;
+        for(int i=0;i<Weights.length;i++){
+            sum = sum + (Weights[i]*Output);
+        }
+        return sum;
     }
 
     /**

@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +35,9 @@ import org.supercsv.prefs.CsvPreference;
 public class Data_Mining extends javax.swing.JFrame {
 
     int typeOfNeuralNetwork;
+    Dataset dataTrain;
+    Dataset dataTest;
+    JPanel[] panel_list;
 
     /**
      * Creates new form Data_Mining
@@ -43,12 +47,12 @@ public class Data_Mining extends javax.swing.JFrame {
         ImageIcon img = new ImageIcon("img\\dm.png");
         this.setIconImage(img.getImage());
         SpinnerModel sm = new SpinnerNumberModel(1000, 1000, 10000, 1);
-        SpinnerModel sm2 = new SpinnerNumberModel(1, 1, 10, 1);
+//        SpinnerModel sm2 = new SpinnerNumberModel(1, 1, 10, 1);
         jSpinner_iteratiuon.setModel(sm);
         typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
         jLabel_hiddenLayer.show(false);
         jSpinner_hiddenLayer.show(false);;
-        jSpinner_hiddenLayer.setModel(sm2);
+//        jSpinner_hiddenLayer.setModel(sm2);
     }
 
     /**
@@ -446,7 +450,7 @@ public class Data_Mining extends javax.swing.JFrame {
 //        jPanel_hidden = new JPanel();
         System.out.println("change " + jSpinner_hiddenLayer.getValue());
         int value = (int) jSpinner_hiddenLayer.getValue();
-        JPanel[] panel_list = new jPanel_hiddenNode[value];
+        panel_list = new jPanel_hiddenNode[value];
         jPanel_hidden.removeAll();
         GroupLayout layout = new GroupLayout(jPanel_hidden);
         jPanel_hidden.setLayout(layout);
@@ -472,7 +476,7 @@ public class Data_Mining extends javax.swing.JFrame {
 
     private void jMenuItem_inTrainSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_inTrainSetActionPerformed
         // TODO add your handling code here:
-        Dataset trainDataSet = readFile();
+        Dataset dataset = readFile();
     }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
 
     Dataset readFile() {
@@ -623,7 +627,7 @@ public class Data_Mining extends javax.swing.JFrame {
 
     private void jMenuItem_inTestSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_inTestSetActionPerformed
         // TODO add your handling code here:
-        Dataset testDataSet = readFile();
+        dataTest = readFile();
     }//GEN-LAST:event_jMenuItem_inTestSetActionPerformed
 
     private void jRadioButtonMenuItem_bpnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem_bpnActionPerformed
@@ -645,6 +649,7 @@ public class Data_Mining extends javax.swing.JFrame {
         double LearningRate;
         try {
             LearningRate = Double.parseDouble(jTextField_LearningRate.getText());
+            
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Learn Rate Error Input");
             return;
@@ -658,6 +663,22 @@ public class Data_Mining extends javax.swing.JFrame {
         }
         int numberIteration = (int) jSpinner_iteratiuon.getValue();
         int numberHiddenLayer = (int) jSpinner_hiddenLayer.getValue();
+        int numberHiddenNode =0;
+        if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
+        } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
+            
+            if(numberHiddenLayer != 0)
+            {
+                int []numberHiddenNodes = new int[numberHiddenLayer];
+                for(int i=0;i<panel_list.length;i++){
+                    JSpinner spin = (JSpinner) panel_list[i].getComponents()[1];
+                    numberHiddenNodes[i]= (int) spin.getValue();
+                }
+                    MLP mlp = new MLP(dataTrain, dataTest, numberHiddenLayer+2, numberHiddenNodes, LearningRate, tf);
+            }
+         
+        }
+
     }//GEN-LAST:event_jMenuItem_runTrainActionPerformed
 
     /**
