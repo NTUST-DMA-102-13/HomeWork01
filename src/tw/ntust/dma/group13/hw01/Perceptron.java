@@ -8,7 +8,7 @@ import java.util.Iterator;
  *
  * @author firman
  */
-public class Perceptron implements MachineLearningInterface {
+public class Perceptron implements MachineLearningInterface,Runnable {
 
     double threshold;
     double learning_rate;
@@ -17,6 +17,8 @@ public class Perceptron implements MachineLearningInterface {
     boolean iterations = false;
     int numIterations = 0;
 
+    
+    int typeRun =0;
     //weights =
     /**
      *
@@ -126,5 +128,10 @@ public class Perceptron implements MachineLearningInterface {
         p.Train(training_set);
 
         p.Test(training_set);
+    }
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
