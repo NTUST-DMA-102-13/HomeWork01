@@ -674,7 +674,7 @@ public class Data_Mining extends javax.swing.JFrame {
                     JSpinner spin = (JSpinner) panel_list[i].getComponents()[1];
                     numberHiddenNodes[i]= (int) spin.getValue();
                 }
-                    MLP mlp = new MLP(dataTrain, dataTest, numberHiddenLayer+2, numberHiddenNodes, LearningRate, tf);
+//                    MLP mlp = new MLP(dataTrain, dataTest, numberHiddenLayer+2, numberHiddenNodes, LearningRate, tf);
             }
          
         }
