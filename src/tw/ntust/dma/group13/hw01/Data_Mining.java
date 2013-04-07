@@ -476,7 +476,7 @@ public class Data_Mining extends javax.swing.JFrame {
 
     private void jMenuItem_inTrainSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_inTrainSetActionPerformed
         // TODO add your handling code here:
-        Dataset dataset = readFile();
+        dataTrain= readFile();
     }//GEN-LAST:event_jMenuItem_inTrainSetActionPerformed
 
     Dataset readFile() {
@@ -594,6 +594,7 @@ public class Data_Mining extends javax.swing.JFrame {
                 dataset.processCategoricalInput();
                 dataset.setNumEntries(numberEntry - 1);
                 dataset.setDataReal(dataValue);
+                dataset.setNumAttributes(header.length);
                 Object[][] dataa = convertTo2ArrayObject(dataTable);
                 System.out.println("dataa.length = " + dataa.length);
                 TableModel table = new DefaultTableModel(dataa, header);
@@ -654,6 +655,7 @@ public class Data_Mining extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Learn Rate Error Input");
             return;
         }
+        System.out.println("LearningRate = " + LearningRate);
         double bias;
         try {
             bias = Double.parseDouble(jTextField_Bias.getText());
@@ -661,11 +663,15 @@ public class Data_Mining extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Bias Error Input");
             return;
         }
+        System.out.println("bias = " + bias);
         int numberIteration = (int) jSpinner_iteratiuon.getValue();
         int numberHiddenLayer = (int) jSpinner_hiddenLayer.getValue();
         int numberHiddenNode =0;
-        if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
-        } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
+        System.out.println("numberIteration = " + numberIteration);
+        System.out.println("numberHiddenLayer = " + numberHiddenLayer);
+        System.out.println("numberHiddenNode = " + numberHiddenNode);
+        if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
+        } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
             
             if(numberHiddenLayer != 0)
             {
@@ -674,7 +680,9 @@ public class Data_Mining extends javax.swing.JFrame {
                     JSpinner spin = (JSpinner) panel_list[i].getComponents()[1];
                     numberHiddenNodes[i]= (int) spin.getValue();
                 }
-//                    MLP mlp = new MLP(dataTrain, dataTest, numberHiddenLayer+2, numberHiddenNodes, LearningRate, tf);
+                    MLP mlp = new MLP(dataTrain, dataTest, numberHiddenLayer+2, numberHiddenNodes, LearningRate, new HyperbolictangentFunction());
+                    mlp.sequential();
+                    System.out.println("Sukses");
             }
          
         }

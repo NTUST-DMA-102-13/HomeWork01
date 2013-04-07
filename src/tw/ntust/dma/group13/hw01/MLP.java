@@ -42,10 +42,11 @@ public class MLP {
         this.ds = ds;
         this.ds2 = ds2;
         this.rate = rate;
-     //   this.momentum = momentum;
         this.tf = tf;
         layers = new NeuronLayer[noLayers];
         //Input layer.
+        System.out.println("ds = " + ds);
+        System.out.println("tf = " + tf);
         layers[0] = new NeuronLayer(ds.getNumAttributes(), ds.getNumAttributes(), tf);
         //Hidden layers.
         for(int i=1; i<layers.length-1; i++){
@@ -103,7 +104,7 @@ public class MLP {
                 outputs = layers[layers.length-1].getOutputs();
                 error += backPropagate(outputs, toOutputVector(ds.getClass(i), layers[layers.length-1].getSize()));
 
-                //For each layer, update weights.
+                //For each layer, updaqte weights.
                 for(int j=layers.length-1; j>0; j--){
                     neurons = layers[j].getNeurons(); 
                     earlierNeurons = layers[j-1].getNeurons();

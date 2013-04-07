@@ -24,6 +24,8 @@ class Dataset {
     private String[] nameAttributes;
     // all of data, save in table with eash key is name of attributes, and
     // data saved in array list
+    // key attribute
+    // objectnny list data
     private Hashtable<String, ArrayList<String>> dataReal;
     // list of distinct value with its frequency
     // exmple in marriage status distinct value list are single=17 data, divorce=18, marriage=20
@@ -42,7 +44,7 @@ class Dataset {
      */
     public int getNumAttributes() {
 //       categoricalAttr
-        
+
         return NumAttributes;
     }
 
@@ -83,11 +85,25 @@ class Dataset {
     }
 
     double getClass(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String clas = nameAttributes[nameAttributes.length - 1];
+        ArrayList<String> nameClas = dataReal.get(clas);
+        String valueClass = nameClas.get(i);
+        return mapCategorcalAttribute.get(clas).get(valueClass);
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     double[] getAttributeSet(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        double[] dataReDs = new double[nameAttributes.length - 1];
+        for (int j = 0; j < nameAttributes.length - 1; j++) {
+            try {
+                dataReDs[j] = Double.parseDouble(dataReal.get(nameAttributes[i]).get(i));
+            } catch (NumberFormatException ex) {
+                String valueClass = dataReal.get(nameAttributes[i]).get(i);
+                dataReDs[j] = mapCategorcalAttribute.get(nameAttributes[i]).get(valueClass);
+            }
+        }
+        return dataReDs;
+      // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

@@ -17,7 +17,9 @@ class NeuronLayer {
     private int Size;
 
     NeuronLayer(int neurons, int numAttributes, TransferFunction tf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.Size = neurons;
+        this.neurons = new Neuron[neurons];
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
