@@ -8,19 +8,18 @@ import java.util.Iterator;
  *
  * @author firman
  */
-public class Perceptron implements MachineLearningInterface,Runnable {
-
+public class Perceptron implements MachineLearningInterface, Runnable {
+    
     double threshold;
     double learning_rate;
     double[] weigths;
     int error_count;
     boolean iterations = false;
     int numIterations = 0;
-
-    
-    private int typeRun =0;
+    private int typeRun = 0;
     double[][][] setInput;
     //weights =
+
     /**
      *
      * @param threshold
@@ -31,7 +30,7 @@ public class Perceptron implements MachineLearningInterface,Runnable {
         this.weigths = new double[Ni];
         this.iterations = false;
     }
-
+    
     public Perceptron(int Ni, double threshold, double learning_rate, int iteratio) {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
@@ -41,22 +40,22 @@ public class Perceptron implements MachineLearningInterface,Runnable {
         System.out.println("this.numIterations = " + this.numIterations);
         System.out.println("this.iterations = " + this.iterations);
     }
-
+    
     public Perceptron(int Ni) {
         this(Ni, 0.5, 0.1);
     }
-
+    
     private double dot_product(double[] values) {
         int n = values.length;//ni
         double sum = 0;
         for (int i = 0; i < n; i++) {
             sum += this.weigths[i] * values[i];
         }
-
+        
         return sum;
     }
     ArrayList<Integer> errors;
-
+    
     public void Train(double[][][] set) {
         errors = new ArrayList<>();
         int inter = 0;
@@ -89,12 +88,12 @@ public class Perceptron implements MachineLearningInterface,Runnable {
         }
         //  return new Object[1][1];
     }
-
+    
     public void Test(double[][][] set) {
-
+        
         return;
     }
-
+    
     public static void main(String[] args) {
         double[][][] training_set;
         //training_set = new double [][][]{{{1, 0, 0}, {1,}}, {{1, 0, 1}, {1,}}, {{1, 1, 0}, {1}}, {{1, 1, 1}, {0}}};
@@ -125,20 +124,21 @@ public class Perceptron implements MachineLearningInterface,Runnable {
          };
          //*/
         Perceptron p = new Perceptron(2);
-
+        
         p.Train(training_set);
-
+        
         p.Test(training_set);
     }
-
+    
     @Override
     public void run() {
         
-        switch(this.typeRun){
+        switch (this.typeRun) {
             case MachineLearningInterface.TrainFunction:
-              
+                this.Train(setInput);
                 break;
             case MachineLearningInterface.TestingFunction:
+                this.Test(setInput);
                 break;
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
