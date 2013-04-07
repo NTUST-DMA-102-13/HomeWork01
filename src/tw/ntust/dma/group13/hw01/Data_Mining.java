@@ -57,13 +57,12 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
      */
     public Data_Mining() {
         try {
-                // Set System L&F
-                UIManager.setLookAndFeel(
+            // Set System L&F
+            UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
-            } 
-            catch (     UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-               // handle exception
-            }
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            // handle exception
+        }
         initComponents();
         ImageIcon img = new ImageIcon("img\\dm.png");
         this.setIconImage(img.getImage());
@@ -77,7 +76,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jSpinner_iteratiuon.setEnabled(false);
         jRadioButton_TrainError.setSelected(true);
         iterasion = false;
-        jTable_deltas.setEnabled(false);
+//        jTable_deltas.setEnabled(false);
         new Thread(this).start();
 //        jSpinner_hiddenLayer.setModel(sm2);
     }
@@ -111,9 +110,6 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_weight = new javax.swing.JTable();
-        jPanel_Deltas = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable_deltas = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_dataSet = new javax.swing.JTable();
@@ -282,32 +278,6 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         );
 
         jTabbedPane1.addTab("Weights ", jPanel3);
-
-        jTable_deltas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable_deltas);
-
-        javax.swing.GroupLayout jPanel_DeltasLayout = new javax.swing.GroupLayout(jPanel_Deltas);
-        jPanel_Deltas.setLayout(jPanel_DeltasLayout);
-        jPanel_DeltasLayout.setHorizontalGroup(
-            jPanel_DeltasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
-        );
-        jPanel_DeltasLayout.setVerticalGroup(
-            jPanel_DeltasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Deltas", jPanel_Deltas);
 
         jTable_dataSet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -694,7 +664,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jSpinner_hiddenLayer.setEnabled(true);
         jLabel_threshold.setEnabled(false);
         jTextField_threshold.setEnabled(false);
-        jTable_deltas.setEnabled(true);
+//        jTable_deltas.setEnabled(true);
     }//GEN-LAST:event_jRadioButtonMenuItem_bpnActionPerformed
 
     private void jRadioButtonMenuItem_propagationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem_propagationActionPerformed
@@ -704,7 +674,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jSpinner_hiddenLayer.setEnabled(false);
         jLabel_threshold.setEnabled(true);
         jTextField_threshold.setEnabled(true);
-        jTable_deltas.setEnabled(false);
+//        jTable_deltas.setEnabled(false);
     }//GEN-LAST:event_jRadioButtonMenuItem_propagationActionPerformed
 
     private void jMenuItem_runTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_runTrainActionPerformed
@@ -844,7 +814,6 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel_Deltas;
     private javax.swing.JPanel jPanel_chart;
     private javax.swing.JPanel jPanel_hidden;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem10;
@@ -861,13 +830,11 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     private javax.swing.JRadioButton jRadioButton_TrainError;
     private javax.swing.JRadioButton jRadioButton_iteration;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jSpinner_hiddenLayer;
     private javax.swing.JSpinner jSpinner_iteratiuon;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_dataSet;
-    private javax.swing.JTable jTable_deltas;
     private javax.swing.JTable jTable_weight;
     private javax.swing.JTextField jTextField_LearningRate;
     private javax.swing.JTextField jTextField_threshold;
