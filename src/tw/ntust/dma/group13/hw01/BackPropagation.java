@@ -148,15 +148,31 @@ public class BackPropagation implements MachineLearningInterface{
     public void Train(double[][][] set,int iteration, double learning_rate, double momentum){
         int N = set.length;
         for (int i = 0 ; i<iteration;i++){
-            double e = 0.0;
+            double error = 0.0;
             
             for(int n = 0;n<N;n++){
                 double[] input= set[n][0];
                 double[] target= set[n][1];
                 this.update(input);
-                e+=this.backPropagate(target,learning_rate,momentum);
+                error+=this.backPropagate(target,learning_rate,momentum);
             }
-            if (i%100==0) {System.out.println("Error: "+e);/* weight();*/}
+            if (i%100==0) {System.out.println("Error: "+error);/* weight();*/}
+        }
+    }
+    
+    public void Train(double[][][] set,double error_threshold, double learning_rate, double momentum){
+        int N = set.length;
+        for (;;){
+            double error = 0.0;
+            
+            for(int n = 0;n<N;n++){
+                double[] input= set[n][0];
+                double[] target= set[n][1];
+                this.update(input);
+                error+=this.backPropagate(target,learning_rate,momentum);
+            }
+            if(error<error_threshold) break;
+            //if (i%100==0) {System.out.println("Error: "+error);/* weight();*/}
         }
     }
 
