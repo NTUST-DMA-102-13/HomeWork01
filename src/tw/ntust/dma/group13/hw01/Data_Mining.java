@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -476,6 +477,9 @@ public class Data_Mining extends javax.swing.JFrame {
                 Map<String, String> customerMap;
 //                dataValue.
                 int numberEntry = 0;
+                ArrayList<String> categoricalAttribute = new ArrayList<>();
+                ArrayList<String> numericalAttribute = new ArrayList<>();
+//                dataset.setCategoricalAttribute(n);
                 while ((customerMap = mapReader.read(header)) != null) {
                     System.out.println(String.format("lineNo=%s, rowNo=%s, customerMap=%s", mapReader.getLineNumber(),
                             mapReader.getRowNumber(), customerMap));
@@ -486,8 +490,18 @@ public class Data_Mining extends javax.swing.JFrame {
                             ArrayList<String> dataObject = new ArrayList<>();
                             dataObject.add(data);
                             dataValue.put(headerTitle, dataObject);
-                            dataset.getListValueAttribute()[i].add(data);
+                            // dataset.getListValueAttribute()[i] = new HashMap<>();
+                            Map map = new HashMap();
+                            map.put(data, 1);
+                            dataset.getListValueAttribute()[i] = map;
                             i++;
+                            // for divided header based on categorical or numerical 
+                            try {
+                                double valueData = Double.parseDouble(data);
+                                numericalAttribute.add(headerTitle);
+                            } catch (NumberFormatException ex) {
+                                categoricalAttribute.add(headerTitle);
+                            }
                         }
                     } else {
                         int i = 0;
@@ -496,8 +510,29 @@ public class Data_Mining extends javax.swing.JFrame {
                             ArrayList<String> dataObject = dataValue.get(headerTitle);
                             dataObject.add(data);
                             dataValue.put(headerTitle, dataObject);
-                            if (!dataset.getListValueAttribute()[i].contains(data)) {
-                                dataset.getListValueAttribute()[i].add(data);
+                            Map map = (Map) dataset.getListValueAttribute()[i];
+                            if (map.containsKey(data)) {
+                                Integer val = (Integer) map.get(data);
+                                val = val + 1;
+                                map.remove(data);
+                                map.put(data, val);
+                            } else {
+                                map.put(data, 1);
+                            }
+                            dataset.getListValueAttribute()[i] = map;
+                            // for divided header based on categorical or numerical ,
+//                            check again each whether each categorical is correct or not
+                            // if in previous reading data, that attribute is numerical categori
+                            // and  if in current reading data , that attribute is categorical 
+                            // then it will be swap from numerical to categorical 
+                            try {
+                                double valueData = Double.parseDouble(data);
+                            } catch (NumberFormatException ex) {
+                                if (!categoricalAttribute.contains(headerTitle)
+                                        && numericalAttribute.contains(headerTitle)) {
+                                    categoricalAttribute.add(headerTitle);
+                                    numericalAttribute.remove(headerTitle);
+                                }
                             }
                             i++;
                         }
@@ -506,7 +541,8 @@ public class Data_Mining extends javax.swing.JFrame {
                     numberEntry = mapReader.getRowNumber();
 
                 }
-
+                dataset.setCategoricalAttribute(categoricalAttribute);
+                dataset.setNumericalAttribute(numericalAttribute);
                 dataset.setNumEntries(numberEntry - 1);
                 dataset.setDataReal(dataValue);
 

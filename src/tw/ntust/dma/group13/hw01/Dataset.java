@@ -5,9 +5,8 @@
 package tw.ntust.dma.group13.hw01;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,13 +26,15 @@ class Dataset {
     // list of distinct value with its frequency
     // exmple in marriage status distinct value list are single=17 data, divorce=18, marriage=20
     // array represent of attribute , example listValueAttribute[0] = marriage status
-    private List<Map<String,Integer>>[] listValueAttribute;
-    
+    private Map<String, Integer>[] listValueAttribute;
+    private ArrayList<String> categoricalAttribute;
+    private ArrayList<String> numericalAttribute;
 
     /**
      * @return the NumAttributes
      */
     public int getNumAttributes() {
+//       categoricalAttr
         return NumAttributes;
     }
 
@@ -41,7 +42,7 @@ class Dataset {
      * @param NumAttributes the NumAttributes to set
      */
     public void setNumAttributes(int NumAttributes) {
-        setListValueAttribute((ArrayList<Map<String,Integer>>[]) new ArrayList[NumAttributes]);
+        setListValueAttribute((Map<String, Integer>[]) new HashMap[NumAttributes]);
         this.NumAttributes = NumAttributes;
     }
 
@@ -112,14 +113,42 @@ class Dataset {
     /**
      * @return the listValueAttribute
      */
-    public List<Map<String,Integer>>[] getListValueAttribute() {
+    public Map<String, Integer>[] getListValueAttribute() {
         return listValueAttribute;
     }
 
     /**
      * @param listValueAttribute the listValueAttribute to set
      */
-    public void setListValueAttribute(List<Map<String,Integer>>[] listValueAttribute) {
+    public void setListValueAttribute(Map<String, Integer>[] listValueAttribute) {
         this.listValueAttribute = listValueAttribute;
+    }
+
+    /**
+     * @return the numericalAttribute
+     */
+    public ArrayList<String> getNumericalAttribute() {
+        return numericalAttribute;
+    }
+
+    /**
+     * @param numericalAttribute the numericalAttribute to set
+     */
+    public void setNumericalAttribute(ArrayList<String> numericalAttribute) {
+        this.numericalAttribute = numericalAttribute;
+    }
+
+    /**
+     * @return the categoricalAttribute
+     */
+    public ArrayList<String> getCategoricalAttribute() {
+        return categoricalAttribute;
+    }
+
+    /**
+     * @param categoricalAttribute the categoricalAttribute to set
+     */
+    public void setCategoricalAttribute(ArrayList<String> categoricalAttribute) {
+        this.categoricalAttribute = categoricalAttribute;
     }
 }
