@@ -52,6 +52,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     Thread data;
     boolean isExit = false;
     boolean isRun = false;
+    int typeRun;
 
     /**
      * Creates new form Data_Mining
@@ -115,6 +116,9 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jTable_dataSet = new javax.swing.JTable();
         jPanel_chart = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable_ouput = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem_inTrainSet = new javax.swing.JMenuItem();
@@ -317,6 +321,34 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
         jTabbedPane1.addTab("Chart", jPanel_chart);
 
+        jTable_ouput.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable_ouput);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 64, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Ouput", jPanel4);
+
         jMenu1.setText("File");
 
         jMenuItem_inTrainSet.setText("Input Training Set");
@@ -435,6 +467,11 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         jMenu9.add(jMenuItem_runTrain);
 
         jMenuItem_runTest.setText("Run Testing");
+        jMenuItem_runTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_runTestActionPerformed(evt);
+            }
+        });
         jMenu9.add(jMenuItem_runTest);
 
         jMenuBar1.add(jMenu9);
@@ -665,6 +702,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
     private void jMenuItem_runTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_runTrainActionPerformed
         // TODO add your handling code here:
+        typeRun = MachineLearningInterface.TrainFunction;
         double LearningRate;
         try {
             LearningRate = Double.parseDouble(jTextField_LearningRate.getText());
@@ -750,6 +788,27 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
         isExit = true;
     }//GEN-LAST:event_formWindowClosed
 
+    private void jMenuItem_runTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_runTestActionPerformed
+        // TODO add your handling code here:
+        if (this.typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
+        } else if (this.typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
+            p.Test(dataTest.getDataSet());
+            System.out.println("p.outs = " + p.outs);
+            ArrayList<Double> retout = p.outs;
+            Object dataout[][] = new Object[retout.size()][1];
+            int count = 0;
+            for (Double ds : retout) {
+                dataout[count][0] = ds;
+                count++;
+            }
+            Object headers[];
+            headers = new Object[]{"Output"};
+            TableModel table2 = new DefaultTableModel(dataout, headers);
+            jTable_ouput.setModel(table2);
+            jTable_ouput.repaint();
+        }
+    }//GEN-LAST:event_jMenuItem_runTestActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -810,6 +869,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel_chart;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem10;
@@ -826,17 +886,20 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
     private javax.swing.JRadioButton jRadioButton_TrainError;
     private javax.swing.JRadioButton jRadioButton_iteration;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jSpinner_hiddenLayer;
     private javax.swing.JSpinner jSpinner_iteratiuon;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_dataSet;
+    private javax.swing.JTable jTable_ouput;
     private javax.swing.JTable jTable_weight;
     private javax.swing.JTextField jTextField_LearningRate;
     private javax.swing.JTextField jTextField_threshold;
     // End of variables declaration//GEN-END:variables
 
     @Override
+    @SuppressWarnings("empty-statement")
     public void run() {
         while (!isExit) {
             try {
@@ -844,102 +907,126 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Data_Mining.class.getName()).log(Level.SEVERE, null, ex);
             }
+            if (typeRun == MachineLearningInterface.TrainFunction) {
 //            System.out.println("isRun = " + isRun+" data "+data+"  " );
-            if (data != null
-                    && typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron
-                    && isRun == true) {
+                if (data != null
+                        && typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron
+                        && isRun == true) {
 //            if (data != null && data.isAlive() && isRun) {
-                System.out.println("isRun = " + isRun);
-                Object[] weight = new Object[p.weigths.length];
-                for (int i = 0; i < weight.length; i++) {
-                    weight[i] = p.weigths[i];
-                }
-                Object dataWe[][] = new Object[1][];
-                dataWe[0] = weight;
-                TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
-                jTable_weight.setModel(table);
-                jTable_weight.repaint();
-                // isRun = false;
-                XYSeries series = new XYSeries("XYGraph");
-                System.out.println("Arrays.toString(p.errors) = " + Arrays.toString(p.errors.toArray()));
-                int i = 1;
-                for (Double err : p.errors) {
-                    series.add(i, err);
-                    i++;
-                }
+                    System.out.println("isRun = " + isRun);
+                    ArrayList<double[]> retWet = p.weights;
+                    Object dataWe[][] = new Object[retWet.size()][];
+                    int count = 0;
+                    for (double[] ds : retWet) {
+                        Object[] weightObj = new Object[ds.length];
+                        for (int i = 0; i < ds.length; i++) {
+                            weightObj[i] = ds[i];
+                        }
+                        dataWe[count] = weightObj;
+                        count++;
+                    }
 
-                // Add the series to your data set
-                XYSeriesCollection dataset = new XYSeriesCollection();
-                dataset.addSeries(series);
-                // Generate the graph
-                JFreeChart chart = ChartFactory.createXYLineChart(
-                        "XY Chart", // Title
-                        "x-axis", // x-axis Label
-                        "y-axis", // y-axis Label
-                        dataset, // Dataset
-                        PlotOrientation.VERTICAL, // Plot Orientation
-                        true, // Show Legend
-                        true, // Use tooltips
-                        false // Configure chart to generate URLs?
-                        );
 
-                try {
-                    ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
-                } catch (IOException e) {
-                    System.err.println("Problem occurred creating chart.");
-                }
+//                    dataWe[0] = weight;
+                    TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
+                    jTable_weight.setModel(table);
+                    jTable_weight.repaint();
+
+                    ArrayList<Double> retout = p.outs;
+                    Object dataout[][] = new Object[retout.size()][1];
+                    count = 0;
+                    for (Double ds : retout) {
+                        dataout[count][0] = ds;
+                        count++;
+                    }
+                    Object headers[];
+                    headers = new Object[]{"Output"};
+                    TableModel table2 = new DefaultTableModel(dataout, headers);
+                    jTable_ouput.setModel(table2);
+                    jTable_ouput.repaint();
+
+                    //                    
+                    // isRun = false;
+                    XYSeries series = new XYSeries("XYGraph");
+                    System.out.println("Arrays.toString(p.errors) = " + Arrays.toString(p.errors.toArray()));
+                    int i = 1;
+                    for (Double err : p.errors) {
+                        series.add(i, err);
+                        i++;
+                    }
+
+                    // Add the series to your data set
+                    XYSeriesCollection dataset = new XYSeriesCollection();
+                    dataset.addSeries(series);
+                    // Generate the graph
+                    JFreeChart chart = ChartFactory.createXYLineChart(
+                            "XY Chart", // Title
+                            "x-axis", // x-axis Label
+                            "y-axis", // y-axis Label
+                            dataset, // Dataset
+                            PlotOrientation.VERTICAL, // Plot Orientation
+                            true, // Show Legend
+                            true, // Use tooltips
+                            false // Configure chart to generate URLs?
+                            );
+
+                    try {
+                        ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+                    } catch (IOException e) {
+                        System.err.println("Problem occurred creating chart.");
+                    }
 //            jPanel1 = new JPanel();
-                ChartPanel CP = new ChartPanel(chart, true);
-                CP.setChart(chart);
-                jPanel1.removeAll();
-                jPanel1.setLayout(new java.awt.BorderLayout());
-                jPanel1.add(CP, BorderLayout.CENTER);
-                jPanel1.validate();
-                jPanel1.repaint();
-            } else if (data != null && typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN
-                    && this.isRun == true) {
-                XYSeries series = new XYSeries("XYGraph");
-                System.out.println("bpn = " + bpn);
-                System.out.println("bpn.errors = " + bpn.errors);
-                System.out.println("Arrays.toString(p.errors) = " + Arrays.toString(bpn.errors.toArray()));
-                int i = 1;
-                for (Double err : bpn.errors) {
-                    series.add(i, err);
-                    i++;
-                }
+                    ChartPanel CP = new ChartPanel(chart, true);
+                    CP.setChart(chart);
+                    jPanel1.removeAll();
+                    jPanel1.setLayout(new java.awt.BorderLayout());
+                    jPanel1.add(CP, BorderLayout.CENTER);
+                    jPanel1.validate();
+                    jPanel1.repaint();
+                } else if (data != null && typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN
+                        && this.isRun == true) {
+                    XYSeries series = new XYSeries("XYGraph");
+                    System.out.println("bpn = " + bpn);
+                    System.out.println("bpn.errors = " + bpn.errors);
+                    System.out.println("Arrays.toString(p.errors) = " + Arrays.toString(bpn.errors.toArray()));
+                    int i = 1;
+                    for (Double err : bpn.errors) {
+                        series.add(i, err);
+                        i++;
+                    }
 
-                // Add the series to your data set
-                XYSeriesCollection dataset = new XYSeriesCollection();
-                dataset.addSeries(series);
-                // Generate the graph
-                JFreeChart chart = ChartFactory.createXYLineChart(
-                        "XY Chart", // Title
-                        "x-axis", // x-axis Label
-                        "y-axis", // y-axis Label
-                        dataset, // Dataset
-                        PlotOrientation.VERTICAL, // Plot Orientation
-                        true, // Show Legend
-                        true, // Use tooltips
-                        false // Configure chart to generate URLs?
-                        );
+                    // Add the series to your data set
+                    XYSeriesCollection dataset = new XYSeriesCollection();
+                    dataset.addSeries(series);
+                    // Generate the graph
+                    JFreeChart chart = ChartFactory.createXYLineChart(
+                            "XY Chart", // Title
+                            "x-axis", // x-axis Label
+                            "y-axis", // y-axis Label
+                            dataset, // Dataset
+                            PlotOrientation.VERTICAL, // Plot Orientation
+                            true, // Show Legend
+                            true, // Use tooltips
+                            false // Configure chart to generate URLs?
+                            );
 
-                try {
-                    ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
-                } catch (IOException e) {
-                    System.err.println("Problem occurred creating chart.");
-                }
+                    try {
+                        ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+                    } catch (IOException e) {
+                        System.err.println("Problem occurred creating chart.");
+                    }
 //            jPanel1 = new JPanel();
-                ChartPanel CP = new ChartPanel(chart, true);
-                CP.setChart(chart);
-                jPanel1.removeAll();
-                jPanel1.setLayout(new java.awt.BorderLayout());
-                jPanel1.add(CP, BorderLayout.CENTER);
-                jPanel1.validate();
-                jPanel1.repaint();
-            }
-            if (data != null && !data.isAlive()) {
-                isRun = false;
-            }
+                    ChartPanel CP = new ChartPanel(chart, true);
+                    CP.setChart(chart);
+                    jPanel1.removeAll();
+                    jPanel1.setLayout(new java.awt.BorderLayout());
+                    jPanel1.add(CP, BorderLayout.CENTER);
+                    jPanel1.validate();
+                    jPanel1.repaint();
+                }
+                if (data != null && !data.isAlive()) {
+                    isRun = false;
+                }
 //            }
 //            else if (data != null && data.isAlive() && isRun) {
 //                XYSeries series = new XYSeries("XYGraph");
@@ -978,6 +1065,8 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
 //                jPanel1.validate();
 //                jPanel1.repaint();
 //            }
+            } else if (typeRun == MachineLearningInterface.TestingFunction) {
+            }
         }
     }
 }

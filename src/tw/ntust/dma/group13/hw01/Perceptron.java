@@ -58,19 +58,25 @@ public class Perceptron implements MachineLearningInterface, Runnable {
         return sum;
     }
     ArrayList<Double> errors;
+    ArrayList<double[]> weights;
+    ArrayList<Double> outs;
 
     public void Train(double[][][] set) {
         this.errors = new ArrayList<>();
+        this.weights = new ArrayList<>();
+        this.outs = new ArrayList<>();
         this.errors.clear();
         int inter = 0;
         for (;;) {
             error_count = 0;
             int countData = 0;
+            this.outs.clear();
+//   this.weights.clear();
             for (double[][] data : set) {
-//                System.out.println("countData = " + countData);
-//                System.out.println("weight " + inter + " - " + countData + " - " + error_count + " " + Arrays.toString(weigths));
+                this.weights.clear();
                 double[] input_data = data[0];
                 int result = dot_product(input_data) > this.getThreshold() ? 1 : 0;
+                this.outs.add((double)result);
                 double error = data[1][0] - result;
                 if (error != 0) {
                     error_count++;
@@ -78,10 +84,12 @@ public class Perceptron implements MachineLearningInterface, Runnable {
                     for (int i = 0; i < n; i++) {
                         this.weigths[i] += getLearning_rate() * error * input_data[i];
                     }
+                    System.out.println("weights = " + weights);
                 }
+                this.weights.add(this.weigths.clone());
                 countData++;
             }
-            this.errors.add((double)error_count);
+            this.errors.add((double) error_count);
             if (error_count == 0) {
                 break;
             }
@@ -99,11 +107,13 @@ public class Perceptron implements MachineLearningInterface, Runnable {
     }
 
     public void Test(double[][][] set) {
+          this.outs = new ArrayList<>();
         for (double[][] s : set) {
             double output = 0.0;
             for (int i = 0; i < s[0].length; i++) {
                 output += s[0][i] * weigths[i];
             }
+            this.outs.add(output);
             System.out.format("%s -> %.5f.\n", Arrays.toString(s[0]), output);
         }
     }

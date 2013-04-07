@@ -173,20 +173,22 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
             for (int k = 0; k < No; k++) {
                 double change = output_deltas[k] * Ah[j];
                 Wo[j][k] += (learning_rate * change + M * Co[j][k]);
+                System.out.print(Wo[j][k] + "\t");
                 this.Co[j][k] = change;
             }
-
+            System.out.println("");
         }
-
+        System.out.println("#############");
         for (int i = 0; i < Ni; i++) {
             for (int j = 0; j < Nh; j++) {
                 double change = hidden_deltas[j] * Ai[i];
                 Wi[i][j] += (learning_rate * change + M * Ci[i][j]);
                 this.Ci[i][j] = change;
-
+                System.out.print(Wi[i][j] + "\t");
             }
-
+            System.out.println("");
         }
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
         double error = 0.0;
         for (int k = 0; k < No; k++) {
             double d = target[k] - Ao[k];
@@ -210,11 +212,13 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
     ArrayList<Double> errors;
 
     public void Train(double[][][] set, int iteration, double learning_rate, double momentum) {
+        System.out.println("iteration = " + iteration);
         this.errors = new ArrayList<>();
         int N = set.length;
         for (int i = 0; i < iteration; i++) {
             double error = 0.0;
 
+            System.out.println("i = " + i);
             for (int n = 0; n < N; n++) {
                 double[] input = set[n][0];
                 double[] target = set[n][1];
@@ -234,6 +238,7 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
     }
 
     public void Train(double[][][] set, double error_threshold, double learning_rate, double momentum) {
+        System.out.println("Error!!! " + error_threshold);
         this.errors = new ArrayList<>();
         int N = set.length;
         int count = 0;
@@ -247,6 +252,8 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
                 error += this.backPropagate(target, learning_rate, momentum);
             }
             if (error < error_threshold) {
+                System.out.println("error = " + error);
+                System.out.println("error_threshold = " + error_threshold);
                 break;
             }
             if (count % 100 == 0) {
@@ -323,7 +330,7 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
             case MachineLearningInterface.TrainFunction:
                 System.out.println("############################");
                 if (isIteration) {
-                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ "+iteration);
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ " + iteration);
                     this.Train(setInput, iteration, learningRate, 0.1);
                 } else {
                     System.out.println("***********************");
