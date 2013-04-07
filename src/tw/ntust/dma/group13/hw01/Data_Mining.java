@@ -38,13 +38,17 @@ import org.supercsv.prefs.CsvPreference;
  *
  * @author win7
  */
-public class Data_Mining extends javax.swing.JFrame {
+public class Data_Mining extends javax.swing.JFrame implements Runnable {
 
+    Perceptron p;
     int typeOfNeuralNetwork;
     Dataset dataTrain;
     Dataset dataTest;
     JPanel[] panel_list;
     boolean iterasion;
+    Thread data;
+    boolean isExit = false;
+    boolean isRun = false;
 
     /**
      * Creates new form Data_Mining
@@ -64,6 +68,7 @@ public class Data_Mining extends javax.swing.JFrame {
         jRadioButton_TrainError.setSelected(true);
         iterasion = false;
         jTable_deltas.setEnabled(false);
+        new Thread(this).start();
 //        jSpinner_hiddenLayer.setModel(sm2);
     }
 
@@ -133,6 +138,11 @@ public class Data_Mining extends javax.swing.JFrame {
         jMenu3.setText("jMenu3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jMenu_processingFunction.show(false);
 
@@ -360,6 +370,11 @@ public class Data_Mining extends javax.swing.JFrame {
         jMenu1.add(jMenuItem_inTestSet);
 
         jMenuItem_quit.setText("Quit");
+        jMenuItem_quit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_quitActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem_quit);
 
         jMenuBar1.add(jMenu1);
@@ -468,7 +483,7 @@ public class Data_Mining extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -700,30 +715,25 @@ public class Data_Mining extends javax.swing.JFrame {
         System.out.println("numberHiddenLayer = " + numberHiddenLayer);
         System.out.println("numberHiddenNode = " + numberHiddenNode);
         if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
-            Perceptron p;
+
             if (!iterasion) {
                 p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate);
-
-                p.Train(dataTrain.getDataSet());
 
             } else {
                 p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate, (int) jSpinner_iteratiuon.getValue());
 
-                p.Train(dataTrain.getDataSet());
+//                p.Train(dataTrain.getDataSet());
 
             }
-            Object[] weight = new Object[p.weigths.length];
-            for (int i = 0; i < weight.length; i++) {
-                weight[i] = p.weigths[i];
-            }
-            Object dataWe[][] = new Object[1][];
-            dataWe[0] = weight;
-            TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
-            jTable_weight.setModel(table);
+            p.setTypeRun(MachineLearningInterface.TrainFunction);
+            p.setSetInput(dataTrain.getDataSet());
+            data = new Thread(p);
+            data.start();
+            isRun = true;
             XYSeries series = new XYSeries("XYGraph");
-            int i=1;
+            int i = 1;
             for (Integer err : p.errors) {
-                series.add(i,err);
+                series.add(i, err);
                 i++;
             }
 
@@ -785,6 +795,17 @@ public class Data_Mining extends javax.swing.JFrame {
         jSpinner_iteratiuon.setEnabled(false);
         iterasion = false;
     }//GEN-LAST:event_jRadioButton_TrainErrorActionPerformed
+
+    private void jMenuItem_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_quitActionPerformed
+        // TODO add your handling code here:
+        isExit = true;
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem_quitActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        isExit = true;
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
@@ -875,4 +896,22 @@ public class Data_Mining extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_LearningRate;
     private javax.swing.JTextField jTextField_threshold;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+        while (!isExit) {
+         //   System.out.println("isRun = " + isRun);
+            if (data!= null && !data.isAlive() && isRun) {
+                Object[] weight = new Object[p.weigths.length];
+                for (int i = 0; i < weight.length; i++) {
+                    weight[i] = p.weigths[i];
+                }
+                Object dataWe[][] = new Object[1][];
+                dataWe[0] = weight;
+                TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
+                jTable_weight.setModel(table);
+                isRun = false;
+            }
+        }
+    }
 }
