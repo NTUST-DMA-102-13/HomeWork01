@@ -15,7 +15,7 @@ public class Perceptron implements MachineLearningInterface {
     double[] weigths;
     int error_count;
     boolean iterations = false;
-    int numIterations =0;
+    int numIterations = 0;
 
     //weights =
     /**
@@ -26,10 +26,10 @@ public class Perceptron implements MachineLearningInterface {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
         this.weigths = new double[Ni];
-        this.iterations =false;
+        this.iterations = false;
     }
 
-    public Perceptron(int Ni, double threshold, double learning_rate,int iteratio) {
+    public Perceptron(int Ni, double threshold, double learning_rate, int iteratio) {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
         this.weigths = new double[Ni];
@@ -38,6 +38,7 @@ public class Perceptron implements MachineLearningInterface {
         System.out.println("this.numIterations = " + this.numIterations);
         System.out.println("this.iterations = " + this.iterations);
     }
+
     public Perceptron(int Ni) {
         this(Ni, 0.5, 0.1);
     }
@@ -51,10 +52,10 @@ public class Perceptron implements MachineLearningInterface {
 
         return sum;
     }
+    ArrayList<Integer> errors;
 
-    Object[][] data;
     public void Train(double[][][] set) {
-        ArrayList<Object[]> daaa= new ArrayList<>();
+        errors = new ArrayList<>();
         int inter = 0;
         for (;;) {
             error_count = 0;
@@ -74,14 +75,16 @@ public class Perceptron implements MachineLearningInterface {
                 }
                 countData++;
             }
+            errors.add(error_count);
             if (error_count == 0) {
                 break;
             }
-            if(iterations && inter == numIterations-1)
+            if (iterations && inter == numIterations - 1) {
                 break;
+            }
             inter++;
         }
-      //  return new Object[1][1];
+        //  return new Object[1][1];
     }
 
     public void Test(double[][][] set) {

@@ -693,14 +693,6 @@ public class Data_Mining extends javax.swing.JFrame {
             return;
         }
         System.out.println("LearningRate = " + LearningRate);
-//        double bias;
-//        try {
-////            bias = Double.parseDouble(jTextField_Bias.getText());
-//        } catch (NumberFormatException ex) {
-//            JOptionPane.showMessageDialog(this, "Bias Error Input");
-//            return;
-//        }
-//        System.out.println("bias = " + bias);
         int numberIteration = (int) jSpinner_iteratiuon.getValue();
         int numberHiddenLayer = (int) jSpinner_hiddenLayer.getValue();
         int numberHiddenNode = 0;
@@ -729,11 +721,12 @@ public class Data_Mining extends javax.swing.JFrame {
             TableModel table = new DefaultTableModel(dataWe, dataTrain.getNameAttributes());
             jTable_weight.setModel(table);
             XYSeries series = new XYSeries("XYGraph");
-            series.add(1, 1);
-            series.add(1, 2);
-            series.add(2, 1);
-            series.add(3, 9);
-            series.add(4, 10);
+            int i=1;
+            for (Integer err : p.errors) {
+                series.add(i,err);
+                i++;
+            }
+
             // Add the series to your data set
             XYSeriesCollection dataset = new XYSeriesCollection();
             dataset.addSeries(series);
@@ -754,11 +747,14 @@ public class Data_Mining extends javax.swing.JFrame {
             } catch (IOException e) {
                 System.err.println("Problem occurred creating chart.");
             }
-            ChartPanel CP = new ChartPanel(chart);
-
+//            jPanel1 = new JPanel();
+            ChartPanel CP = new ChartPanel(chart, true);
+            CP.setChart(chart);
+            jPanel1.removeAll();
             jPanel1.setLayout(new java.awt.BorderLayout());
-            jPanel1.add(CP,BorderLayout.CENTER);
+            jPanel1.add(CP, BorderLayout.CENTER);
             jPanel1.validate();
+            jPanel1.repaint();
 //            jPanel_chart.repaint();
 
         } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
