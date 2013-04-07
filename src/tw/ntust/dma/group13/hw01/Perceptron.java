@@ -13,6 +13,8 @@ public class Perceptron implements MachineLearningInterface {
     double learning_rate;
     double[] weigths;
     int error_count;
+    boolean iterations = false;
+    int numIterations =0;
 
     //weights =
     /**
@@ -23,8 +25,18 @@ public class Perceptron implements MachineLearningInterface {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
         this.weigths = new double[Ni];
+        this.iterations =false;
     }
 
+    public Perceptron(int Ni, double threshold, double learning_rate,int iteratio) {
+        this.threshold = 0.5;
+        this.learning_rate = 0.1;
+        this.weigths = new double[Ni];
+        this.numIterations = iteratio;
+        this.iterations = true;
+        System.out.println("this.numIterations = " + this.numIterations);
+        System.out.println("this.iterations = " + this.iterations);
+    }
     public Perceptron(int Ni) {
         this(Ni, 0.5, 0.1);
     }
@@ -64,6 +76,8 @@ public class Perceptron implements MachineLearningInterface {
             if (error_count == 0) {
                 break;
             }
+            if(iterations && inter == numIterations-1)
+                break;
             inter++;
         }
     }

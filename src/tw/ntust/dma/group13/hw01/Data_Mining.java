@@ -38,6 +38,7 @@ public class Data_Mining extends javax.swing.JFrame {
     Dataset dataTrain;
     Dataset dataTest;
     JPanel[] panel_list;
+    boolean iterasion;
 
     /**
      * Creates new form Data_Mining
@@ -46,12 +47,16 @@ public class Data_Mining extends javax.swing.JFrame {
         initComponents();
         ImageIcon img = new ImageIcon("img\\dm.png");
         this.setIconImage(img.getImage());
-        SpinnerModel sm = new SpinnerNumberModel(1000, 1000, 10000, 1);
+        SpinnerModel sm = new SpinnerNumberModel(10, 10, 10000, 1);
 //        SpinnerModel sm2 = new SpinnerNumberModel(1, 1, 10, 1);
         jSpinner_iteratiuon.setModel(sm);
         typeOfNeuralNetwork = Contraint.NeuralNetwork_Perceptron;
         jLabel_hiddenLayer.setEnabled(false);
-        jSpinner_hiddenLayer.setEnabled(false);;
+        jSpinner_hiddenLayer.setEnabled(false);
+//                jLab.setEnabled(false);
+        jSpinner_iteratiuon.setEnabled(false);
+        jRadioButton_TrainError.setSelected(true);
+        iterasion = false;
 //        jSpinner_hiddenLayer.setModel(sm2);
     }
 
@@ -704,9 +709,17 @@ public class Data_Mining extends javax.swing.JFrame {
         System.out.println("numberHiddenLayer = " + numberHiddenLayer);
         System.out.println("numberHiddenNode = " + numberHiddenNode);
         if (typeOfNeuralNetwork == Contraint.NeuralNetwork_Perceptron) {
-            Perceptron p = new Perceptron(dataTrain.getNumAttributes()-1, LearningRate, LearningRate);
+            if (!iterasion) {
+                Perceptron p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate);
 
-            p.Train(dataTrain.getDataSet());
+                p.Train(dataTrain.getDataSet());
+
+            } else {
+                Perceptron p = new Perceptron(dataTrain.getNumAttributes() - 1, LearningRate, LearningRate, (int) jSpinner_iteratiuon.getValue());
+
+                p.Train(dataTrain.getDataSet());
+
+            }
         } else if (typeOfNeuralNetwork == Contraint.NeuralNetwork_BPN) {
 
             if (numberHiddenLayer != 0) {
@@ -727,11 +740,13 @@ public class Data_Mining extends javax.swing.JFrame {
     private void jRadioButton_iterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_iterationActionPerformed
         // TODO add your handling code here:
         jSpinner_iteratiuon.setEnabled(true);
+        iterasion = true;
     }//GEN-LAST:event_jRadioButton_iterationActionPerformed
 
     private void jRadioButton_TrainErrorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_TrainErrorActionPerformed
         // TODO add your handling code here:
         jSpinner_iteratiuon.setEnabled(false);
+        iterasion = false;
     }//GEN-LAST:event_jRadioButton_TrainErrorActionPerformed
 
     /**
