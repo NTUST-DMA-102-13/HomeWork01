@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -76,7 +77,7 @@ public class Perceptron implements MachineLearningInterface, Runnable {
                 this.weights.clear();
                 double[] input_data = data[0];
                 int result = dot_product(input_data) > this.getThreshold() ? 1 : 0;
-                this.outs.add((double)result);
+                this.outs.add((double) result);
                 double error = data[1][0] - result;
                 if (error != 0) {
                     error_count++;
@@ -107,7 +108,7 @@ public class Perceptron implements MachineLearningInterface, Runnable {
     }
 
     public void Test(double[][][] set) {
-          this.outs = new ArrayList<>();
+        this.outs = new ArrayList<>();
         for (double[][] s : set) {
             double output = 0.0;
             for (int i = 0; i < s[0].length; i++) {
@@ -160,9 +161,11 @@ public class Perceptron implements MachineLearningInterface, Runnable {
         switch (this.typeRun) {
             case MachineLearningInterface.TrainFunction:
                 this.Train(getSetInput());
+                JOptionPane.showMessageDialog(null, "Process Train Finished");
                 break;
             case MachineLearningInterface.TestingFunction:
                 this.Test(getSetInput());
+                JOptionPane.showMessageDialog(null, "Process Test Finished");
                 break;
         }
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
