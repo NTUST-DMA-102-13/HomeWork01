@@ -1042,7 +1042,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                     jPanel1.validate();
                     jPanel1.repaint();
 
-                    ArrayList<Double[]> retWet = bpn.weightList;
+                    ArrayList<Double[]> retWet = (ArrayList<Double[]>) bpn.weightList.clone();
                     Object dataWe[][] = new Object[retWet.size()][4];
                     int count = 0;
                     for (Double[] ds : retWet) {
