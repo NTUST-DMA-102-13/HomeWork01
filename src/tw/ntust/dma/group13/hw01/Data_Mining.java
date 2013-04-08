@@ -1046,7 +1046,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                     Object dataWe[][] = new Object[retWet.size()][4];
                     int count = 0;
                     for (Double[] ds : retWet) {
-
+                        System.out.println("ds.length = " + ds.length);
                         dataWe[count] = ds;
                         count++;
                     }
@@ -1058,7 +1058,7 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                     jTable_weight.repaint();
 
 
-                    ArrayList<double[]> retout = bpn.ouput;
+                    ArrayList<double[]> retout = (ArrayList<double[]>) bpn.ouput.clone();
                     Object dataout[][] = new Object[retout.size()][];
                     count = 0;
                     for (double[] ds : retout) {
