@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -355,9 +356,11 @@ public class BackPropagation implements MachineLearningInterface, Runnable {
                     System.out.println("***********************");
                     this.Train(setInput, error, learningRate, 0.1);
                 }
+                JOptionPane.showMessageDialog(null, "Processes Train Succes");
                 break;
             case MachineLearningInterface.TestingFunction:
                 this.Test(getSetInput());
+                JOptionPane.showMessageDialog(null, "Processes Test Succes");
                 break;
         }
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

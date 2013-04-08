@@ -798,14 +798,14 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
             for (double[] ds : retout) {
                 Object[] dsCast = new Object[ds.length];
                 for (int l = 0; l < dsCast.length; l++) {
-                    dsCast[l] = ds[l];
+                    dsCast[l] = Math.round(ds[l]);
                 }
                 dataout[count] = dsCast;
                 count++;
             }
 //                    Object headers[];
 //                    headers = new Object[]{"Output"};
-            TableModel table2 = new DefaultTableModel(dataout, dataTrain.getClassValue());
+            TableModel table2 = new DefaultTableModel(dataout, dataTest.getClassValue());
             jTable_ouput.setModel(table2);
             jTable_ouput.repaint();
 
@@ -1042,11 +1042,11 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                     jPanel1.validate();
                     jPanel1.repaint();
 
-                    ArrayList<Double[]> retWet = bpn.weightList;
+                    ArrayList<Double[]> retWet = (ArrayList<Double[]>) bpn.weightList.clone();
                     Object dataWe[][] = new Object[retWet.size()][4];
                     int count = 0;
                     for (Double[] ds : retWet) {
-
+                        System.out.println("ds.length = " + ds.length);
                         dataWe[count] = ds;
                         count++;
                     }
@@ -1058,13 +1058,13 @@ public class Data_Mining extends javax.swing.JFrame implements Runnable {
                     jTable_weight.repaint();
 
 
-                    ArrayList<double[]> retout = bpn.ouput;
+                    ArrayList<double[]> retout = (ArrayList<double[]>) bpn.ouput.clone();
                     Object dataout[][] = new Object[retout.size()][];
                     count = 0;
                     for (double[] ds : retout) {
                         Object[] dsCast = new Object[ds.length];
                         for (int l = 0; l < dsCast.length; l++) {
-                            dsCast[l] = ds[l];
+                            dsCast[l] = Math.round(ds[l]);
                         }
                         dataout[count] = dsCast;
                         count++;
