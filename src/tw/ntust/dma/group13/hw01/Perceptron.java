@@ -16,6 +16,7 @@ public class Perceptron implements MachineLearningInterface, Runnable {
     private double learning_rate;
     double[] weigths;
     int error_count;
+    int Ni;
     boolean iterations = false;
     int numIterations = 0;
     private int typeRun = 0;
@@ -26,26 +27,28 @@ public class Perceptron implements MachineLearningInterface, Runnable {
      *
      * @param threshold
      */
-    public Perceptron(int Ni, double threshold, double learning_rate) {
+    public Perceptron(int ni, double threshold, double learning_rate) {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
+        this.Ni = ni +1 ;
         this.weigths = new double[Ni];
         this.iterations = false;
         this.errors = new ArrayList<>();
 
     }
 
-    public Perceptron(int Ni, double threshold, double learning_rate, int iteratio) {
+    public Perceptron(int ni, double threshold, double learning_rate, int iteratio) {
         this.threshold = 0.5;
         this.learning_rate = 0.1;
+        this.Ni = ni +1 ;
         this.weigths = new double[Ni];
         this.numIterations = iteratio;
         this.iterations = true;
         this.errors = new ArrayList<>();
     }
 
-    public Perceptron(int Ni) {
-        this(Ni, 0.5, 0.1);
+    public Perceptron(int ni) {
+        this(ni, 0.5, 0.1);
     }
 
     private double dot_product(double[] values) {
@@ -74,7 +77,9 @@ public class Perceptron implements MachineLearningInterface, Runnable {
 //   this.weights.clear();
             for (double[][] data : set) {
                 this.weights.clear();
-                double[] input_data = data[0];
+                double[] input_data = new double[Ni];
+                for(int i=0;i<Ni-1;i++)input_data[i]=data[0][i];
+                input_data[Ni-1]=1;
                 int result = dot_product(input_data) > this.getThreshold() ? 1 : 0;
                 this.outs.add((double)result);
                 double error = data[1][0] - result;
@@ -84,7 +89,7 @@ public class Perceptron implements MachineLearningInterface, Runnable {
                     for (int i = 0; i < n; i++) {
                         this.weigths[i] += getLearning_rate() * error * input_data[i];
                     }
-                    System.out.println("weights = " + weights);
+                    System.out.println("weights = " + Arrays.toString(weigths));
                 }
                 this.weights.add(this.weigths.clone());
                 countData++;
@@ -113,6 +118,7 @@ public class Perceptron implements MachineLearningInterface, Runnable {
             for (int i = 0; i < s[0].length; i++) {
                 output += s[0][i] * weigths[i];
             }
+            output += 1 * weigths[Ni-1];
             this.outs.add(output);
             System.out.format("%s -> %.5f.\n", Arrays.toString(s[0]), output);
         }
